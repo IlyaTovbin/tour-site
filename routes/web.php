@@ -6,3 +6,14 @@ use App\Http\Controllers\AuthController;
 
 // Route::get('/', [MainController::class, 'index']);
 Route::get('/', [AuthController::class, 'index']);
+Route::post('/', [AuthController::class, 'postLogin']);
+
+Route::middleware(['login_guard'])->group(function () {
+    Route::get('/dashboard', [MainController::class, 'index']);
+    Route::get('/logout', [MainController::class, 'logout']);
+    Route::resource('/schedule', 'App\Http\Controllers\content\ScheduleController');
+    Route::resource('/tours', 'App\Http\Controllers\content\ToursController');
+    Route::resource('/vir-tours', 'App\Http\Controllers\content\VirtourController');
+    Route::resource('/blog', 'App\Http\Controllers\content\BlogController');
+    Route::resource('/faq', 'App\Http\Controllers\content\FaqController');
+});
