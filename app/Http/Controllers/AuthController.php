@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 class AuthController extends Controller
 {
     public static function index(){
-        return view('login');
+        $view_data['title'] = 'Login';
+        return view('login', $view_data);
     }
 }
