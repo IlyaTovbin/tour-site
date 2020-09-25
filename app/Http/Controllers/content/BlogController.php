@@ -17,7 +17,7 @@ class BlogController extends Controller
 
     public function ajaxRequest(Request $request){
 
-        if(in_array( $request['method'], ['saveCategory'])){
+        if(in_array( $request['method'], ['saveCategory', 'deleteCategory', 'editCategory'])){
             $method = $request['method'];
             $this->$method($request);
         }else{
@@ -27,5 +27,13 @@ class BlogController extends Controller
 
     public function saveCategory($request){
         Category::saveCategory($request['name']);
+    }
+
+    public function editCategory($request){
+        Category::editCategory($request['id'], $request['value']);
+    }
+
+    public function deleteCategory($request){
+        Category::deleteCategory($request['id']);
     }
 }
