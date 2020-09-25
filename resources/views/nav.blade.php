@@ -18,31 +18,31 @@
       </h6>
       <ul class="nav flex-column mb-2">
         <li class="nav-item">
-            <a class="nav-link {{ $schedule ?? '' }}" href="{{ url('/schedule') }}">
+            <a class="nav-link nav-link-a {{ $schedule ?? '' }}" href="{{ url('/schedule') }}">
                 <span data-feather="file-text"></span>
                 Расписание
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $tours ?? '' }}" href="{{ url('/tours') }}">
+            <a class="nav-link nav-link-a {{ $tours ?? '' }}" href="{{ url('/tours') }}">
                 <span data-feather="file-text"></span>
                 Маршруты
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $vir_tours ?? '' }}" href="{{ url('/vir-tours') }}">
+            <a class="nav-link nav-link-a {{ $vir_tours ?? '' }}" href="{{ url('/vir-tours') }}">
                 <span data-feather="file-text"></span>
                 Вир-туры
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $blog ?? '' }}" href="{{ url('/blog') }}">
+            <a class="nav-link nav-link-a {{ $blog ?? '' }}" href="{{ url('/blog') }}">
                 <span data-feather="file-text"></span>
                 Блог
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ $faq ?? '' }}" href="{{ url('/faq') }}">
+            <a class="nav-link nav-link-a {{ $faq ?? '' }}" href="{{ url('/faq') }}">
                 <span data-feather="file-text"></span>
                 FAQ
             </a>

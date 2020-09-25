@@ -1,7 +1,11 @@
 body {
     font-size: .875rem;
   }
-  
+
+  .nav-link-a{
+    width: 7rem;
+  }
+
   .feather {
     width: 16px;
     height: 16px;

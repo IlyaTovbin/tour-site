@@ -5,14 +5,19 @@ namespace App\Http\Controllers\content;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\content\Category;
+use App\Models\content\Blog;
+use App\Http\Requests\BlogRequest;
 
 class BlogController extends Controller
 {
+    public $view_data = [
+        'title' => 'Blog',
+        'blog' => 'active'
+    ];
+
     public function index(){
-        $view_data['title'] = 'Blog';
-        $view_data['blog'] = 'active';
-        $view_data['categories'] = Category::getCategories();
-        return view('content/blog/blog_index', $view_data);
+        $this->view_data['categories'] = Category::getCategories();
+        return view('content/blog/blog_index', $this->view_data);
     }
 
     public function ajaxRequest(Request $request){
@@ -35,5 +40,17 @@ class BlogController extends Controller
 
     public function deleteCategory($request){
         Category::deleteCategory($request['id']);
+    }
+
+    public function create(){
+        $this->view_data['title'] .= ' Create';
+        $this->view_data['categories'] = Category::getCategories();
+        return view('content/blog/blog_create', $this->view_data);
+    }
+
+    public function store(BlogRequest $request){
+        Blog::store($request);
+        $view_data['categories'] = Category::getCategories();
+        return view('content/blog/blog_index', $this->view_data);
     }
 }

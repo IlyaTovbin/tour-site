@@ -26,6 +26,10 @@
 </div>
 @stop
 
+@section('summernote-script')
+  @yield('summernote-script')
+@stop
+
 @section('scripts')
 @yield('script')
 @stop
