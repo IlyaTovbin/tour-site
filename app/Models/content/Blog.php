@@ -7,6 +7,12 @@ use DB;
 
 class Blog extends Model
 {
+
+    static public function getPosts(){
+        $posts = DB::table('blogs')->get();
+        return $posts;
+    }
+
     static public function store($request){
 
             $blog = new self();

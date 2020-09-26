@@ -26,6 +26,34 @@
             </div>
             <a data-toggle="modal" data-target="#ModalCenter" href="#" class="btn btn-primary mt-2 col-12 col-lg-1">+Создать категорию</a>
         </div>
+        <hr>
+
+        <div class="row">
+            @foreach ($posts as $post)
+                <div class="col-12 col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                        <h5 class="card-title">
+                            <a class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ $post->title }}</a>
+                            <div class="dropdown-menu p-2">
+                              <p class=""><a href="#"><i class="fas fa-edit"></i> Редактировать</a></p>
+                              <p class=""><a href="#"><i class="far fa-trash-alt"></i> Удалить</a></p>
+                            </div>
+                            </h5>
+                        <p class="card-text">Категория:</p>
+                        <p class="card-text">Создан: {{ $post->created_at }}</p>
+                        <p class="card-text"><a href=""><i class="far fa-eye"></i> Просмотр</a></p>
+                        @if($post->created_at != $post->updated_at)
+                            <p class="card-text text-success">Обновлена:</p>
+                        @endif
+                        <p><i class="fas fa-toggle-on"></i> </p>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+          </div>
+  
     </main>  
     @component('utilities.center_modal')
     @slot('title')Создать категорию @endslot

@@ -15,8 +15,9 @@ class BlogController extends Controller
         'blog' => 'active'
     ];
 
-    public function index(){
+    public function index(Request $request){
         $this->view_data['categories'] = Category::getCategories();
+        $this->view_data['posts'] = Blog::getPosts($request);
         return view('content/blog/blog_index', $this->view_data);
     }
 
