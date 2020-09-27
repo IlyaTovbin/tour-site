@@ -1,3 +1,15 @@
 .categorie-p{
     font-size: 1.2rem;
 }
+
+.card-link{
+    text-decoration: none;
+}
+
+.card-link:hover{
+    color: black;
+}
+
+.content-value{
+    font-size: 1rem;
+}

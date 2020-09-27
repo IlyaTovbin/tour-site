@@ -23,12 +23,16 @@ class BlogController extends Controller
 
     public function ajaxRequest(Request $request){
 
-        if(in_array( $request['method'], ['saveCategory', 'deleteCategory', 'editCategory'])){
+        if(in_array( $request['method'], ['saveCategory', 'deleteCategory', 'editCategory', 'deleteBlog'])){
             $method = $request['method'];
             $this->$method($request);
         }else{
             return 'Error';
         }
+    }
+
+    public function deleteBlog($request){
+        Blog::deleteBlog($request['id']);
     }
 
     public function saveCategory($request){
@@ -50,8 +54,9 @@ class BlogController extends Controller
     }
 
     public function store(BlogRequest $request){
-        Blog::store($request);
-        $view_data['categories'] = Category::getCategories();
-        return view('content/blog/blog_index', $this->view_data);
+        if(Blog::store($request)){
+            $view_data['categories'] = Category::getCategories();
+            return redirect('/blog');
+        }
     }
 }

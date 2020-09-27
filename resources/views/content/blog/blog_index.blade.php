@@ -29,19 +29,20 @@
         <hr>
 
         <div class="row">
+            @if(isset($posts))
             @foreach ($posts as $post)
-                <div class="col-12 col-lg-4">
-                    <div class="card">
+                <div class="col-12 col-lg-4 my-1">
+                    <div class="card shadow">
                         <div class="card-body">
                         <h5 class="card-title">
                             <a class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ $post->title }}</a>
-                            <div class="dropdown-menu p-2">
-                              <p class=""><a href="#"><i class="fas fa-edit"></i> Редактировать</a></p>
-                              <p class=""><a href="#"><i class="far fa-trash-alt"></i> Удалить</a></p>
+                            <div class="dropdown-menu p-2 ">
+                              <p class=""><a href="#" class="text-dark card-link non-target"><i class="fas fa-edit"></i> Редактировать</a></p>
+                              <p class=""><a href="#" class="text-dark card-link non-target delete-card" data-title="{{ $post->title }}" data-id="{{ $post->id }}"><i class="far fa-trash-alt"></i> Удалить</a></p>
                             </div>
                             </h5>
-                        <p class="card-text">Категория:</p>
+                        <p class="card-text">Категория: {{ $post->category }} </p>
                         <p class="card-text">Создан: {{ $post->created_at }}</p>
                         <p class="card-text"><a href=""><i class="far fa-eye"></i> Просмотр</a></p>
                         @if($post->created_at != $post->updated_at)
@@ -52,6 +53,7 @@
                     </div>
                 </div>
             @endforeach
+            @endif
           </div>
   
     </main>  
@@ -59,7 +61,7 @@
     @slot('title')Создать категорию @endslot
     @slot('modal_id')ModalCenter @endslot
     @slot('body')<input class="form-control" id="category-input" type="text" placeholder="названия категории"> @endslot
-    @slot('action') save-category @endslot
+    @slot('action') save-category btn-primary @endslot
     @endcomponent
 
     @component('utilities.center_modal')
@@ -68,11 +70,22 @@
     @slot('body')
         <input class="form-control" id="edit-category-val" type="text" placeholder="">
         <input type="hidden" id="edit-category-id">
-     @endslot
-    @slot('action') edit-category @endslot
+    @endslot
+    @slot('action') edit-category btn-primary @endslot
     @slot('actionName') Редактировать @endslot
     @slot('action2') btn-danger delete-category @endslot
     @slot('action2Name') Удалить @endslot
+    @endcomponent
+
+    @component('utilities.center_modal')
+    @slot('title')Удалить Статью? @endslot
+    @slot('modal_id')deleteModal @endslot
+    @slot('body')
+    <p class="content-value badge badge-danger"></p> 
+    <input type="hidden" class="id-value">
+    @endslot
+    @slot('action') delete-post btn-danger @endslot
+    @slot('actionName') Удалить @endslot
     @endcomponent
 
 @stop
@@ -87,6 +100,24 @@
                 $('#ModalCenterEdit').modal('show');
                 $('#edit-category-val').val(selectedCategory[1]);
                 $('#edit-category-id').val(selectedCategory[0]);
+            }
+        })
+
+        $(document).on('click', '.delete-card', function(){
+            let postId = $(this).data('id');
+            let title = $(this).data('title');
+            $('.content-value').text(title)
+            $('.id-value').val(postId)
+            $('#deleteModal').modal('show');
+        })
+
+        $('.delete-post').on('click', function(){
+            data = {
+                id: $('.id-value').val(),
+                method: 'deleteBlog'
+            }
+            if(data.id){
+                sendAjax(data, "{{ url('/ajaxRequest/blog') }}")
             }
         })
 

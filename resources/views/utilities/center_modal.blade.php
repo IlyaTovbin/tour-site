@@ -8,12 +8,12 @@
         </button>
       </div>
       <div class="modal-body">
-        {{ $body }}
+        {{ $body ?? '' }}
         <span class="text-danger error-place"></span>
       </div>
       <div class="modal-footer d-flex justify-content-between">
         <button type="button" class="btn {{ $action2 ?? 'btn-secondary' }}" data-dismiss="modal">{{ $action2Name ?? 'Отмена' }}</button>
-        <button type="button" class="btn btn-primary {{ $action }}">{{ $actionName ?? 'Создать' }}</button>
+        <button type="button" class="btn {{ $action }}">{{ $actionName ?? 'Создать' }}</button>
       </div>
     </div>
   </div>
