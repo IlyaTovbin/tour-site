@@ -3,6 +3,7 @@
 namespace App\Models\content;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use DB;
 
 class Blog extends Model
@@ -32,6 +33,30 @@ class Blog extends Model
                 $query->delete();
             }
         }
+    }
+
+    static public function getPost($id){
+        if(is_numeric($id)){
+            $post = DB::table('blogs as b')
+            ->join('categories as c', 'c.id', 'b.categorie_id')
+            ->where('b.id', '=', $id)
+            ->select('b.*', 'c.name as category')
+            ->first();
+            $post->body = unserialize($post->body);
+            return $post;
+        }
+    }
+
+    static public function updatePost($request,int $id){
+        DB::table('blogs')
+        ->where('id', '=', $id)
+        ->update([
+            'title' => $request['title'],
+            'categorie_id' => $request['category'],
+            'body' => serialize($request['summernote']),
+            'updated_at' => Carbon::now()
+        ]);
+        return TRUE;
     }
 
 }

@@ -38,7 +38,7 @@
                             <a class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ $post->title }}</a>
                             <div class="dropdown-menu p-2 ">
-                              <p class=""><a href="#" class="text-dark card-link non-target"><i class="fas fa-edit"></i> Редактировать</a></p>
+                              <p class=""><a href="{{ url("/blog/{$post->id}/edit") }}" class="text-dark card-link"><i class="fas fa-edit"></i> Редактировать</a></p>
                               <p class=""><a href="#" class="text-dark card-link non-target delete-card" data-title="{{ $post->title }}" data-id="{{ $post->id }}"><i class="far fa-trash-alt"></i> Удалить</a></p>
                             </div>
                             </h5>
@@ -46,7 +46,7 @@
                         <p class="card-text">Создан: {{ $post->created_at }}</p>
                         <p class="card-text"><a href=""><i class="far fa-eye"></i> Просмотр</a></p>
                         @if($post->created_at != $post->updated_at)
-                            <p class="card-text text-success">Обновлена:</p>
+                            <p class="card-text text-success">Обновлен: {{ $post->updated_at }}</p>
                         @endif
                         <p><i class="fas fa-toggle-on"></i> </p>
                         </div>

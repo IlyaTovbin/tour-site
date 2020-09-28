@@ -59,4 +59,17 @@ class BlogController extends Controller
             return redirect('/blog');
         }
     }
+
+    public function edit(Request $request, $id){
+        $this->view_data['post'] = Blog::getPost($id);
+        $this->view_data['title'] .= ' Edit';
+        $this->view_data['categories'] = Category::getCategories();
+        return view('content/blog/blog_edit', $this->view_data);
+    }
+
+    public function update(BlogRequest $request, $id){
+        if(Blog::updatePost($request, $id)){
+            return redirect('/blog');
+        }
+    }
 }
