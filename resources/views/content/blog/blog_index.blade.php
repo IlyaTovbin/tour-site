@@ -27,28 +27,53 @@
             <a data-toggle="modal" data-target="#ModalCenter" href="#" class="btn btn-primary mt-2 col-12 col-lg-1">+Создать категорию</a>
         </div>
         <hr>
-
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <button type="button" class="btn btn-outline-secondary"><i class="fas fa-list"></i></button>
+              @if($relevant_categories)
+              <select class="form-control">
+                    <option>Все</option>
+                    @foreach ($relevant_categories as $item)
+                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                    @endforeach
+              </select>
+              @endif
+            </div>
+            <div class="input-group-prepend">
+                <button type="button" class="btn btn-outline-secondary"><i class="far fa-calendar-alt"></i></button>
+                <select class="form-control">
+                      <option>Новые</option>
+                      <option>Старые</option>
+                </select>
+              </div>
+            <input type="text" class="form-control" placeholder="Поиск">
+          </div>
         <div class="row">
             @if(isset($posts))
             @foreach ($posts as $post)
                 <div class="col-12 col-lg-4 my-1">
-                    <div class="card shadow">
+                    <div class="card shadow h-100">
                         <div class="card-body">
-                        <h5 class="card-title">
-                            <a class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ $post->title }}</a>
-                            <div class="dropdown-menu p-2 ">
-                              <p class=""><a href="{{ url("/blog/{$post->id}/edit") }}" class="text-dark card-link"><i class="fas fa-edit"></i> Редактировать</a></p>
-                              <p class=""><a href="#" class="text-dark card-link non-target delete-card" data-title="{{ $post->title }}" data-id="{{ $post->id }}"><i class="far fa-trash-alt"></i> Удалить</a></p>
-                            </div>
+                            <h5 class="card-title">
+                                <a class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ $post->title }}</a>
+                                <div class="dropdown-menu p-2 ">
+                                <p class=""><a href="{{ url("/blog/{$post->id}/edit") }}" class="text-dark card-link"><i class="fas fa-edit"></i> Редактировать</a></p>
+                                <p class=""><a href="#" class="text-dark card-link non-target delete-card" data-title="{{ $post->title }}" data-id="{{ $post->id }}"><i class="far fa-trash-alt"></i> Удалить</a></p>
+                                </div>
                             </h5>
-                        <p class="card-text">Категория: {{ $post->category }} </p>
-                        <p class="card-text">Создан: {{ $post->created_at }}</p>
-                        <p class="card-text"><a href=""><i class="far fa-eye"></i> Просмотр</a></p>
-                        @if($post->created_at != $post->updated_at)
-                            <p class="card-text text-success">Обновлен: {{ $post->updated_at }}</p>
-                        @endif
-                        <p><i class="fas fa-toggle-on"></i> </p>
+                            <p class="card-text"><i class="fas fa-list"></i> Категория: {{ $post->category }} </p>
+                            <p class="card-text"><i class="far fa-calendar-alt"></i> Создан: {{ $post->created_at }}</p>
+                            <p class="card-text"><a href=""><i class="far fa-eye"></i> Просмотр</a></p>
+                            @if($post->created_at != $post->updated_at)
+                                <p class="card-text text-success"><i class="far fa-calendar-alt"></i> Обновлен: {{ $post->updated_at }}</p>
+                            @endif
+                            <div class="form-check">
+                                <input class="form-check-input" @if($post->active === 1) checked @endif data-id="{{ $post->id }}" type="checkbox">
+                                <label class="form-check-label">
+                                    Показать на сайте
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -157,14 +182,27 @@
                 $('.error-place').text('поля обязательно | минимум 2 символа')
             }
         })
-        function sendAjax(data, url){
+
+        $('.form-check-input').on('click', function(){
+            let value = $(this).prop('checked') ? true : false;
+            console.log(value)
+            let id = $(this).data('id');
+            let data = { 
+                id: id,
+                value: value,
+                method: 'activePost' 
+            }
+            sendAjax(data, "{{ url('/ajaxRequest/blog') }}", false)
+        })
+
+        function sendAjax(data, url, reload = true){
             $.ajax({
                 type: 'GET',
                 url: url,
                 data: data,
                 datatype:'html',
                 success: function (data) {
-                    location.reload();
+                    if(reload) location.reload();
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log(errorMessage);     

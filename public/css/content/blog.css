@@ -13,3 +13,12 @@
 .content-value{
     font-size: 1rem;
 }
+
+.card:hover{
+    cursor: pointer;
+    background-color: #F4F4F4;
+}
+
+.card{
+    transition: all .2s;
+}

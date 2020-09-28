@@ -18,12 +18,13 @@ class BlogController extends Controller
     public function index(Request $request){
         $this->view_data['categories'] = Category::getCategories();
         $this->view_data['posts'] = Blog::getPosts($request);
+        $this->view_data['relevant_categories'] = Category::getCategories($this->view_data['posts']);
         return view('content/blog/blog_index', $this->view_data);
     }
 
     public function ajaxRequest(Request $request){
 
-        if(in_array( $request['method'], ['saveCategory', 'deleteCategory', 'editCategory', 'deleteBlog'])){
+        if(in_array( $request['method'], ['saveCategory', 'deleteCategory', 'editCategory', 'deleteBlog', 'activePost'])){
             $method = $request['method'];
             $this->$method($request);
         }else{
@@ -31,19 +32,23 @@ class BlogController extends Controller
         }
     }
 
-    public function deleteBlog($request){
+    public function activePost(Request $request){
+        Blog::activePost($request);
+    }
+
+    public function deleteBlog(Request $request){
         Blog::deleteBlog($request['id']);
     }
 
-    public function saveCategory($request){
+    public function saveCategory(Request $request){
         Category::saveCategory($request['name']);
     }
 
-    public function editCategory($request){
+    public function editCategory(Request $request){
         Category::editCategory($request['id'], $request['value']);
     }
 
-    public function deleteCategory($request){
+    public function deleteCategory(Request $request){
         Category::deleteCategory($request['id']);
     }
 

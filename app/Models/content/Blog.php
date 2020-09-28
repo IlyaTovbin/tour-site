@@ -59,4 +59,16 @@ class Blog extends Model
         return TRUE;
     }
 
+    static public function activePost($request){
+
+        if(!is_numeric($request['id']) || !in_array($request['value'], ['true', 'false'])) return false;
+        $value = ($request['value'] == 'true') ? 1 : 0;
+        DB::table('blogs')
+        ->where('id', '=', $request['id'])
+        ->update([
+            'active' => $value,
+        ]);
+        return TRUE;
+    }
+
 }

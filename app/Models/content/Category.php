@@ -36,7 +36,12 @@ class Category extends Model
             ->update(['name' => $name]);
     }
 
-    static public function getCategories(){
-        return DB::table('categories')->select('id', 'name')->get();
+    static public function getCategories($data = false){
+        if(!$data) return DB::table('categories')->select('id', 'name')->get();
+        $ids = $data->pluck('categorie_id')->toArray();
+        return DB::table('categories')
+        ->whereIn('id', $ids)
+        ->select('id', 'name')
+        ->get();
     }
 }
