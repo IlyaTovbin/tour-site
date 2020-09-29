@@ -9,12 +9,27 @@ use DB;
 class Blog extends Model
 {
 
-    static public function getPosts(){
+    static public function getPosts($request = false){
         $posts = DB::table('blogs as b')
         ->join('categories as c', 'c.id', 'b.categorie_id')
-        ->select('b.*', 'c.name as category')
-        ->get();
-        return $posts;
+        ->select('b.*', 'c.name as category');
+
+        if(isset($request['filterBy']) && is_numeric($request['filterBy'])){
+            $posts = $posts->where('b.categorie_id', '=', $request['filterBy']);
+        }
+
+        if(isset($request['filterByCreated']) && in_array($request['filterByCreated'], ['DESC', 'ASC'])){
+            $posts = $posts->orderBy('b.updated_at', $request['filterByCreated']);
+        }else{
+            $posts = $posts->orderBy('b.updated_at', 'DESC');
+        }
+
+        if(isset($request['search'])){
+            $search = $request['search'];
+            $posts = $posts->where('b.title', 'LIKE', "%$search%");
+        }
+
+        return $posts->simplePaginate(12);
     }
 
     static public function store($request){

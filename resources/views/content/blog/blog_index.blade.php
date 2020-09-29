@@ -1,3 +1,6 @@
+@php
+    $url = url('/blog');
+@endphp
 @extends('dashboard')
 
 @section('style')
@@ -27,27 +30,11 @@
             <a data-toggle="modal" data-target="#ModalCenter" href="#" class="btn btn-primary mt-2 col-12 col-lg-2">+Создать категорию</a>
         </div>
         <hr>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <button type="button" class="btn btn-outline-secondary"><i class="fas fa-list"></i></button>
-              @if($relevant_categories)
-              <select class="form-control">
-                    <option>Все</option>
-                    @foreach ($relevant_categories as $item)
-                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                    @endforeach
-              </select>
-              @endif
-            </div>
-            <div class="input-group-prepend">
-                <button type="button" class="btn btn-outline-secondary"><i class="far fa-calendar-alt"></i></button>
-                <select class="form-control">
-                      <option>Новые</option>
-                      <option>Старые</option>
-                </select>
-            </div>
-            <input type="text" class="form-control" placeholder="Поиск">
-          </div>
+        @component('utilities.filter_bar', [ 
+            'filterBy' => $relevant_categories,
+            'url' => $url 
+        ])
+        @endcomponent
         <div class="row">
             @if(isset($posts))
             @foreach ($posts as $post)
@@ -78,9 +65,21 @@
                     </div>
                 </div>
             @endforeach
+            @else
+                <p class="mx-3"><i>Посты не найдены</i></p>
             @endif
         </div>
-  
+        <div class="d-flex justify-content-center my-4">
+            {{ $posts->links() ?? '' }}
+        </div>
+        
+        {{-- <nav aria-label="Page navigation mt-5 " style="background-color: #E2E2E2">
+            <ul class="pagination p-2 justify-content-end pagination-md">
+
+              <li class="page-item"><a class="page-link" href="{{ $url . '?' }}">Пред.</a></li>
+              <li class="page-item"><a class="page-link" href="{{ $url }}">След.</a></li>
+            </ul>
+          </nav> --}}
     </main>  
     @component('utilities.center_modal')
     @slot('title')Создать категорию @endslot
