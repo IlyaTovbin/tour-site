@@ -77,4 +77,10 @@ class BlogController extends Controller
             return redirect('/blog');
         }
     }
+
+    public function show(Request $request, $id){
+        $this->view_data['post'] = Blog::getPost($id);
+        $this->view_data['title'] = ' Post';
+        return view('content/blog/blog_post_view', $this->view_data);
+    }
 }

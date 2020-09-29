@@ -51,7 +51,7 @@
                             </h5>
                             <p class="card-text"><i class="fas fa-list"></i> Категория: {{ $post->category }} </p>
                             <p class="card-text"><i class="far fa-calendar-alt"></i> Создан: {{ $post->created_at }}</p>
-                            <p class="card-text"><a href=""><i class="far fa-eye"></i> Просмотр</a></p>
+                            <p class="card-text"><a target="_blank" href="{{ url("blog/{$post->id}") }}"><i class="far fa-eye"></i> Просмотр</a></p>
                             @if($post->created_at != $post->updated_at)
                                 <p class="card-text text-success"><i class="far fa-calendar-alt"></i> Обновлен: {{ $post->updated_at }}</p>
                             @endif
