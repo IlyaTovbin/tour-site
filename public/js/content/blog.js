@@ -75,17 +75,3 @@ $('.form-check-input').on('click', function(){
     sendAjax(data, BLOG_URL, false)
 })
 
-function sendAjax(data, url, reload = true){
-    $.ajax({
-        type: 'GET',
-        url: url,
-        data: data,
-        datatype:'html',
-        success: function (data) {
-            if(reload) location.reload();
-        },
-        error: function (jqXhr, textStatus, errorMessage) {
-            console.log(errorMessage);     
-        }
-    });
-}

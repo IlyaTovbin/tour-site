@@ -6,7 +6,6 @@
     $config->set('URI.AllowedSchemes', array('data' => true));
     $purifier = new HTMLPurifier($config);
     $clean_html = $purifier->purify($post->body);
-    // dd($post->body);
 @endphp
 
 @extends('main')

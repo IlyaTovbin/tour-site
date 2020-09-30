@@ -4,7 +4,7 @@
 @extends('dashboard')
 
 @section('style')
-    <link rel="stylesheet" href="{{ asset('css/content/blog.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/content/index.css') }}">
 @endsection
 
 @section('main_content')
@@ -71,15 +71,7 @@
         </div>
         <div class="d-flex justify-content-center my-4">
             {{ $posts->links() ?? '' }}
-        </div>
-        
-        {{-- <nav aria-label="Page navigation mt-5 " style="background-color: #E2E2E2">
-            <ul class="pagination p-2 justify-content-end pagination-md">
-
-              <li class="page-item"><a class="page-link" href="{{ $url . '?' }}">Пред.</a></li>
-              <li class="page-item"><a class="page-link" href="{{ $url }}">След.</a></li>
-            </ul>
-          </nav> --}}
+        </div>    
     </main>  
     @component('utilities.center_modal')
     @slot('title')Создать категорию @endslot
@@ -118,5 +110,5 @@
     <script>
         const BLOG_URL = "{{ url('/ajaxRequest/blog') }}";
     </script>
-    <script src="{{ asset('js/blog.js') }}"></script>
+    <script src="{{ asset('js/content/blog.js') }}"></script>
 @endsection
