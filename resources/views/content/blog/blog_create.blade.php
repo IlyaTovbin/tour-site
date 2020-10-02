@@ -11,7 +11,7 @@
             <a class="btn btn-secondary" href="{{ url('/blog') }}">Назад</a>
         </div>
         <div>
-            <form action="{{ url('/blog') }}" method="POST" onsubmit="return validateForm()" class="create-post-form">
+            <form action="{{ url('/blog') }}" enctype="multipart/form-data" method="POST" onsubmit="return validateForm()" class="create-post-form">
                 @csrf
                 <div class="form-row">
                    <div class="form-group col-md-6">
@@ -43,6 +43,12 @@
                         <span class="summernote-error text-danger"></span>
                     </div>
                 </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <input type="file" name="image" id="image">
+                        <p class="image-error text-danger"></p>
+                    </div>
+                </div>
                 <button type="submit" class="btn btn-primary">Сохранить</button>
               </form>
         </div>
@@ -59,6 +65,7 @@
 <script>
     function validateForm(){
         let valid = true;
+        let image = $('#image').val();
         let title = $('#title').val();
         let category = parseInt($('#category').val());
         let summernote = $('#summernote').val();
@@ -83,6 +90,10 @@
             $('.summernote-error').text('');
         }
 
+        if(image.length < 3){
+            $('.image-error').text('пожалуйста заполните это поле');
+            valid = false;
+        }
         if(valid) return true;
         return false;
 

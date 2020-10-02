@@ -17,6 +17,7 @@ class BlogRequest extends FormRequest
             'title' => 'required|min:2',
             'category' => 'required',
             'summernote' => 'required|min:2',
+            'image' => 'required',
         ];
     }
 }

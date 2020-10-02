@@ -31,9 +31,21 @@
                     <div class="form-group col-md-12">
                         <label for="google_maps">Координаты на карте:</label>
                         <br>
-                        <textarea class="col-12 col-lg-6" name="google_maps" id="google_maps" cols="150" rows="2">{{ $tour->google_maps }}</textarea>
+                        <textarea class="col-12 col-lg-6" name="google_maps" id="google_maps" cols="150" rows="2">{{ $tour->google_maps ?? '' }}</textarea>
                     </div>
                 </div>
+                @if($tour->images)
+                <div class="form-row">
+                    <div class="form-group col-lg-12">
+                        @foreach ($tour->images as $image)
+                           <img src="{{ url('images/tours/' . $image) }}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 dropdown-toggle img-fluid col-12 col-lg-2 mb-1" alt="Responsive image">
+                           <div class="dropdown-menu p-2">
+                            <p class=""><a href="#" class="text-dark card-link non-target"  data-id="{{ $image }}"><i class="far fa-trash-alt"></i> Удалить</a></p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
                 <button type="submit" class="btn btn-primary">Редактировать</button>
               </form>
         </div>

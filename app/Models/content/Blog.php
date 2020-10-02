@@ -38,10 +38,17 @@ class Blog extends Model
     }
 
     static public function store($request){
+
+            $name = $request['image']->getClientOriginalName();
+            $path = public_path('images\\blogs');
+            $file_name = pathinfo($name, PATHINFO_FILENAME) . date("-Y-m-d-H-i-s.")  . pathinfo($name, PATHINFO_EXTENSION);
+            $result = $request['image']->move($path, $file_name);
+
             $blog = new self();
             $blog->categorie_id = $request['category'];
             $blog->title = $request['title'];
             $blog->body = serialize($request['summernote']);
+            $blog->image = $file_name;
             $blog->save();
             return TRUE;
     }
@@ -50,7 +57,9 @@ class Blog extends Model
         if(is_numeric($id)){
             $query = DB::table('blogs')->where('id', $id);
             if($query->first()){
+                $image = $query->select('image')->first();
                 $query->delete();
+                unlink(public_path('images\\blogs\\') . $image->image);
             }
         }
     }
