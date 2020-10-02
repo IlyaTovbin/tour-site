@@ -16,3 +16,11 @@ function sendAjax(data, url, reload = true){
         }
     });
 }
+
+$(document).on('click', '.delete-card', function(){
+    let postId = $(this).data('id');
+    let title = $(this).data('title');
+    $('.content-value').text(title)
+    $('.id-value').val(postId)
+    $('#deleteModal').modal('show');
+})

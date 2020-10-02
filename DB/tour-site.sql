@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 30, 2020 at 02:53 PM
+-- Generation Time: Oct 02, 2020 at 02:34 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -99,11 +99,23 @@ CREATE TABLE `tours` (
   `id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `body` longtext NOT NULL,
-  `images` text NOT NULL,
+  `images` text DEFAULT NULL,
   `google_maps` text DEFAULT NULL,
-  `update_at` datetime NOT NULL,
-  `created_at` datetime NOT NULL
+  `active` tinyint(4) NOT NULL DEFAULT 0,
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tours`
+--
+
+INSERT INTO `tours` (`id`, `title`, `body`, `images`, `google_maps`, `active`, `updated_at`, `created_at`) VALUES
+(2, 'Test', 's:11:\"<p>Test</p>\";', 'a:4:{i:0;s:56:\"wallpaperflare.com_wallpaper (8)-2020-10-02-10-09-19.jpg\";i:1;s:56:\"wallpaperflare.com_wallpaper (9)-2020-10-02-10-09-19.jpg\";i:2;s:57:\"wallpaperflare.com_wallpaper (10)-2020-10-02-10-09-19.jpg\";i:3;s:57:\"wallpaperflare.com_wallpaper (11)-2020-10-02-10-09-19.jpg\";}', 's:126:\"<iframe src=\"https://www.google.com/maps/d/u/1/embed?mid=1tsWCikDdu11UfZIv3L2ydT0hRZY-8bfH\" width=\"640\" height=\"480\"></iframe>\";', 1, '2020-10-02 10:09:19', '2020-10-02 10:09:19'),
+(3, 'test 2', 's:13:\"<h3>test</h3>\";', 'a:4:{i:0;s:57:\"wallpaperflare.com_wallpaper (11)-2020-10-02-11-28-34.jpg\";i:1;s:57:\"wallpaperflare.com_wallpaper (12)-2020-10-02-11-28-34.jpg\";i:2;s:57:\"wallpaperflare.com_wallpaper (13)-2020-10-02-11-28-34.jpg\";i:3;s:52:\"wallpaperflare.com_wallpaper-2020-10-02-11-28-34.jpg\";}', 's:126:\"<iframe src=\"https://www.google.com/maps/d/u/1/embed?mid=1tsWCikDdu11UfZIv3L2ydT0hRZY-8bfH\" width=\"640\" height=\"480\"></iframe>\";', 0, '2020-10-02 11:28:34', '2020-10-02 11:28:34'),
+(4, 'test', 's:11:\"<p>test</p>\";', NULL, NULL, 0, '2020-10-02 11:54:55', '2020-10-02 11:54:55'),
+(5, 'test 3', 's:17:\"<p>test&nbsp;</p>\";', NULL, NULL, 0, '2020-10-02 11:55:04', '2020-10-02 11:55:04'),
+(6, 'test 5', 's:13:\"<p>test 5</p>\";', NULL, NULL, 0, '2020-10-02 11:55:10', '2020-10-02 11:55:10');
 
 -- --------------------------------------------------------
 
@@ -179,7 +191,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `tours`
 --
 ALTER TABLE `tours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `users`

@@ -12,7 +12,7 @@ class Blog extends Model
     static public function getPosts($request = false){
         $posts = DB::table('blogs as b')
         ->join('categories as c', 'c.id', 'b.categorie_id')
-        ->select('b.*', 'c.name as category');
+        ->select('b.id', 'b.title', 'b.categorie_id', 'b.active', 'b.created_at', 'b.updated_at', 'c.name as category');
 
         if(isset($request['filterBy']) && is_numeric($request['filterBy'])){
             $posts = $posts->where('b.categorie_id', '=', $request['filterBy']);
@@ -22,6 +22,11 @@ class Blog extends Model
             $posts = $posts->orderBy('b.updated_at', $request['filterByCreated']);
         }else{
             $posts = $posts->orderBy('b.updated_at', 'DESC');
+        }
+
+        if(isset($request['active']) && in_array($request['active'], ['0', '1'])){
+            $active = $request['active'] == '1' ? 1 : 0 ;
+            $posts = $posts->where('b.active', '=', $active);
         }
 
         if(isset($request['search'])){

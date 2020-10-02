@@ -14,49 +14,45 @@
             <h1 class="h2">Маршруты</h1>
             <a class="btn btn-primary" href="{{ url('/tours/create') }}">+Создать Маршрут</a>
         </div>
-        <hr>
-        {{-- @component('utilities.filter_bar', [ 
-            'filterBy' => $relevant_categories,
+        @component('utilities.filter_bar', [ 
             'url' => $url 
         ])
-        @endcomponent --}}
+        @endcomponent
         <div class="row">
-            {{-- @if(isset($posts))
-            @foreach ($posts as $post)
-                <div class="col-12 col-lg-4 my-1">
-                    <div class="card shadow h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <a class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ $post->title }}</a>
-                                <div class="dropdown-menu p-2 ">
-                                <p class=""><a href="{{ url("/blog/{$post->id}/edit") }}" class="text-dark card-link"><i class="fas fa-edit"></i> Редактировать</a></p>
-                                <p class=""><a href="#" class="text-dark card-link non-target delete-card" data-title="{{ $post->title }}" data-id="{{ $post->id }}"><i class="far fa-trash-alt"></i> Удалить</a></p>
+            @if(isset($tours_list) && count($tours_list) > 0)
+                @foreach ($tours_list as $tour)
+                    <div class="col-12 col-lg-4 my-1">
+                        <div class="card shadow h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{ $tour->title }}</a>
+                                    <div class="dropdown-menu p-2 ">
+                                    <p class=""><a href="{{ url("/tours/{$tour->id}/edit") }}" class="text-dark card-link"><i class="fas fa-edit"></i> Редактировать</a></p>
+                                    <p class=""><a href="#" class="text-dark card-link non-target delete-card" data-title="{{ $tour->title }}" data-id="{{ $tour->id }}"><i class="far fa-trash-alt"></i> Удалить</a></p>
+                                    </div>
+                                </h5>
+                                <p class="card-text"><i class="far fa-calendar-alt"></i> Создан: {{ $tour->created_at }}</p>
+                                <p class="card-text"><a target="_blank" href="{{ url("tours/{$tour->id}") }}"><i class="far fa-eye"></i> Просмотр</a></p>
+                                @if($tour->created_at != $tour->updated_at)
+                                    <p class="card-text text-success"><i class="far fa-calendar-alt"></i> Обновлен: {{ $tour->updated_at }}</p>
+                                @endif
+                                <div class="form-check">
+                                    <input class="form-check-input" @if($tour->active === 1) checked @endif data-id="{{ $tour->id }}" type="checkbox">
+                                    <label class="form-check-label">
+                                        Показать на сайте
+                                    </label>
                                 </div>
-                            </h5>
-                            <p class="card-text"><i class="fas fa-list"></i> Категория: {{ $post->category }} </p>
-                            <p class="card-text"><i class="far fa-calendar-alt"></i> Создан: {{ $post->created_at }}</p>
-                            <p class="card-text"><a target="_blank" href="{{ url("blog/{$post->id}") }}"><i class="far fa-eye"></i> Просмотр</a></p>
-                            @if($post->created_at != $post->updated_at)
-                                <p class="card-text text-success"><i class="far fa-calendar-alt"></i> Обновлен: {{ $post->updated_at }}</p>
-                            @endif
-                            <div class="form-check">
-                                <input class="form-check-input" @if($post->active === 1) checked @endif data-id="{{ $post->id }}" type="checkbox">
-                                <label class="form-check-label">
-                                    Показать на сайте
-                                </label>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-            @else --}}
+                @endforeach
+            @else
                 <p class="mx-3"><i>Маршруты не найдены</i></p>
-                <iframe src="https://www.google.com/maps/d/u/1/embed?mid=1tsWCikDdu11UfZIv3L2ydT0hRZY-8bfH" width="640" height="480"></iframe> 
-            {{-- @endif
+            @endif
         </div>
         <div class="d-flex justify-content-center my-4">
-            {{-- {{ $posts->links() ?? '' }} --}}
+            {{ $tours_list->links() ?? '' }}
         </div>
         
     </main>  

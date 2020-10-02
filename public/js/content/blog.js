@@ -8,13 +8,6 @@ $('.select-handler').change(function(){
     }
 })
 
-$(document).on('click', '.delete-card', function(){
-    let postId = $(this).data('id');
-    let title = $(this).data('title');
-    $('.content-value').text(title)
-    $('.id-value').val(postId)
-    $('#deleteModal').modal('show');
-})
 
 $('.delete-post').on('click', function(){
     data = {
