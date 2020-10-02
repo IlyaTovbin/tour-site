@@ -15,7 +15,7 @@ class ToursController extends Controller
     ];
 
     public function index(){
-        return view('content/tours/tours_index', $view_data);
+        return view('content/tours/tours_index', $this->view_data);
     }
 
     public function create(){
@@ -25,7 +25,7 @@ class ToursController extends Controller
 
     public function store(TourRequest $request){
         if(Tour::store($request)){
-            return redirect('/tour');
+            return redirect('/tours');
         }
     }
 }

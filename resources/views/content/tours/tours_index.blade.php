@@ -52,7 +52,8 @@
             @endforeach
             @else --}}
                 <p class="mx-3"><i>Маршруты не найдены</i></p>
-            {{-- @endif --}}
+                <iframe src="https://www.google.com/maps/d/u/1/embed?mid=1tsWCikDdu11UfZIv3L2ydT0hRZY-8bfH" width="640" height="480"></iframe> 
+            {{-- @endif
         </div>
         <div class="d-flex justify-content-center my-4">
             {{-- {{ $posts->links() ?? '' }} --}}

@@ -17,6 +17,7 @@ class TourRequest extends FormRequest
             'title' => 'required|min:2',
             'summernote' => 'required|min:2',
             'file' => 'nullable',
+            'google_maps' => 'nullable',
         ];
     }
 }

@@ -8,30 +8,37 @@
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">Создание Маршрута</h1>
-            <a class="btn btn-secondary" href="{{ url('/tour') }}">Назад</a>
+            <a class="btn btn-secondary" href="{{ url('/tours') }}">Назад</a>
         </div>
         <div>
             <form action="{{ url('/tours') }}" enctype="multipart/form-data" method="POST" onsubmit="return validateForm()" class="create-tour-form">
                 @csrf
                 <div class="form-row">
                    <div class="form-group col-md-6">
-                    <label for="title">Заголовок</label>
+                    <label for="title">Заголовок:</label>
                     <input type="text" class="form-control" name="title" id="title" placeholder="">
                     <span class="text-danger title"></span>
                    </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <label for="summernote">Контент</label>
+                        <label for="summernote">Контент:</label>
                         <textarea name="summernote" id="summernote"></textarea>
                         <span class="summernote-error text-danger"></span>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <label for="file">Галерея</label>
+                        <label for="file">Галерея:</label>
                         <br>
                         <input type="file" multiple name="file[]" id="file">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="google_maps">Координаты на карте:</label>
+                        <br>
+                        <textarea class="col-12 col-lg-6" name="google_maps" id="google_maps" cols="150" rows="2"></textarea>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Сохранить</button>
