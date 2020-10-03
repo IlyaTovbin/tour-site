@@ -22,7 +22,6 @@ class BlogController extends Controller
     }
 
     public function ajaxRequest(Request $request){
-
         if(in_array( $request['method'], ['deleteBlog', 'activePost'])){
             $method = $request['method'];
             $this->$method($request);

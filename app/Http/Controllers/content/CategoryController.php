@@ -15,13 +15,9 @@ class CategoryController extends Controller
     ];
 
     public function index(Request $request){
-        $this->view_data['categories'] = Category::getCategories();
+        $this->view_data['categories'] = Category::getCategories(false, $request);
         return view('content/category/category_index', $this->view_data);
     }
-
-    // public function deleteBlog(Request $request){
-    //     Blog::deleteBlog($request['id']);
-    // }
 
     public function show(Request $request, $id){
         $this->view_data['category'] = Category::getCategory($id);
@@ -34,10 +30,20 @@ class CategoryController extends Controller
         return view('content/category/category_create', $this->view_data);
     }
 
+    public function ajaxRequest(Request $request){
+        if(in_array( $request['method'], ['deleteCategory'])){
+            $method = $request['method'];
+            $this->$method($request);
+        }else{
+            return 'Error';
+        }
+    }
+
     public function store(CategoryRequest $request){
         if(Category::saveCategory($request)){
             return redirect('/categories');
         }
+        return 'Store category Error';
     }
 
     public function edit(Request $request, $id){
@@ -46,10 +52,14 @@ class CategoryController extends Controller
         return view('content/category/category_edit', $this->view_data);
     }
 
-    // public function update(BlogRequest $request, $id){
-    //     if(Blog::updatePost($request, $id)){
-    //         return redirect('/blog');
-    //     }
-    // }
+    public function update(CategoryRequest $request, $id){
+        if(Category::updateCategory($request, $id)){
+            return redirect('/categories');
+        }
+    }
+
+    private function deleteCategory(Request $request){
+        Category::deleteCategory($request['id']);
+    }
 
 }

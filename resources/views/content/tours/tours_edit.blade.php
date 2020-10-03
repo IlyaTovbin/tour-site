@@ -1,7 +1,7 @@
 @extends('dashboard')
 
 @section('style')
-    <link rel="stylesheet" href="{{ asset('css/content/blog.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/content/index.css') }}">
 @endsection
 
 @section('main_content')

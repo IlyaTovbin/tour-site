@@ -58,7 +58,7 @@
     <p class="content-value badge badge-danger"></p> 
     <input type="hidden" class="id-value">
     @endslot
-    @slot('action') delete-post btn-danger @endslot
+    @slot('action') delete-category btn-danger @endslot
     @slot('actionName') Удалить @endslot
     @endcomponent
 
@@ -67,6 +67,14 @@
 @section('script')
     <script>
         const CATEGORY_URL = "{{ url('/ajaxRequest/category') }}";
+        $('.delete-category').on('click', function(){
+            data = {
+                id: $('.id-value').val(),
+                method: 'deleteCategory'
+            }
+            if(data.id){
+                sendAjax(data, CATEGORY_URL)
+            }
+})
     </script>
-    {{-- <script src="{{ asset('js/content/blog.js') }}"></script> --}}
 @endsection
