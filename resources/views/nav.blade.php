@@ -42,6 +42,12 @@
             </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link nav-link-a {{ $category_nav ?? '' }}" href="{{ url('/categories') }}">
+              <span data-feather="file-text"></span>
+              Категории
+          </a>
+      </li>
+        <li class="nav-item">
             <a class="nav-link nav-link-a {{ $faq ?? '' }}" href="{{ url('/faq') }}">
                 <span data-feather="file-text"></span>
                 FAQ

@@ -13,30 +13,13 @@
             <h1 class="h2">Блог</h1>
             <a class="btn btn-primary" href="{{ url('/blog/create') }}">+Создать пост</a>
         </div>
-        <div>
-            <div class="row">
-                    <p class="categorie-p col-12 col-lg-1">категории:</p>
-                    <select class="form-control select-handler col-12 col-lg-10">
-                        <option value="">Список категории...</option>
-                        @if(!empty($categories))
-                            @foreach($categories as $category)
-                                <option class="" value="{{ $category->id }} - {{ $category->name }}">
-                                    <a href="#" data-toggle="modal" data-target="#ModalCenterEdit">{{ $category->name }}</a>
-                                </option>
-                            @endforeach
-                        @endif
-                    </select>
-            </div>
-            <a data-toggle="modal" data-target="#ModalCenter" href="#" class="btn btn-primary mt-2 col-12 col-lg-2">+Создать категорию</a>
-        </div>
-        <hr>
         @component('utilities.filter_bar', [ 
             'filterBy' => $relevant_categories,
             'url' => $url 
         ])
         @endcomponent
         <div class="row">
-            @if(isset($posts))
+            @if(isset($posts) && count($posts) > 0)
             @foreach ($posts as $post)
                 <div class="col-12 col-lg-4 my-1">
                     <div class="card shadow h-100">
@@ -73,25 +56,7 @@
             {{ $posts->links() ?? '' }}
         </div>    
     </main>  
-    @component('utilities.center_modal')
-    @slot('title')Создать категорию @endslot
-    @slot('modal_id')ModalCenter @endslot
-    @slot('body')<input class="form-control" id="category-input" type="text" placeholder="названия категории"> @endslot
-    @slot('action') save-category btn-primary @endslot
-    @endcomponent
 
-    @component('utilities.center_modal')
-    @slot('title')Редактировать/Удалить категорию @endslot
-    @slot('modal_id')ModalCenterEdit @endslot
-    @slot('body')
-        <input class="form-control" id="edit-category-val" type="text" placeholder="">
-        <input type="hidden" id="edit-category-id">
-    @endslot
-    @slot('action') edit-category btn-primary @endslot
-    @slot('actionName') Редактировать @endslot
-    @slot('action2') btn-danger delete-category @endslot
-    @slot('action2Name') Удалить @endslot
-    @endcomponent
 
     @component('utilities.center_modal')
     @slot('title')Удалить Статью? @endslot

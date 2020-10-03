@@ -2,9 +2,9 @@ $('.non-target').on('click', function(e){
     e.preventDefault();
 })
 
-function sendAjax(data, url, reload = true){
+function sendAjax(data, url, reload = true, type = 'get'){
     $.ajax({
-        type: 'GET',
+        type: type,
         url: url,
         data: data,
         datatype:'html',

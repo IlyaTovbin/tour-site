@@ -10,6 +10,7 @@
       </select>
     </div>
     @endif
+    @if(!isset($active_off))
     <div class="input-group-prepend">
         <button type="button" class="btn btn-outline-secondary"><i class="fas fa-toggle-on"></i></i></button>
         <select class="form-control select-by-active">
@@ -18,6 +19,7 @@
               <option value="0">Не активные</option>
         </select>
     </div>
+    @endif
     <div class="input-group-prepend">
         <button type="button" class="btn btn-outline-secondary"><i class="far fa-calendar-alt"></i></button>
         <select class="form-control select-by-newest">

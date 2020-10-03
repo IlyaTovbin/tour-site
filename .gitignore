@@ -2,6 +2,7 @@
 /public/hot
 /public/images/tours
 /public/images/blogs
+/public/images/category
 /public/storage
 /storage/*.key
 /vendor
