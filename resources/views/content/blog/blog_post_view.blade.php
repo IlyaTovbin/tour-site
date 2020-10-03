@@ -10,14 +10,23 @@
 
 @extends('main')
 
+@section('styles')
+<link rel="stylesheet" href="{{ asset('css/style.default.css') }}" id="theme-stylesheet">
+@endsection
+
 @section('content')
+<section class="hero py-6 py-lg-7 text-white dark-overlay"><img class="bg-image" src="{{ asset('images/category/' . $category->image) }}" alt="Text page">
+    <div class="container overlay-content">
+      <h1 class="hero-heading">{{ $category->name }}</h1>
+    </div>
+</section>
+<section class="py-6">
 <div class="container">
-    <h1 class="bg-primary text-light text-center mb-5">{{ $post->title }}</h1>
     <div class="">
         {!! $clean_html !!}
     </div>
 </div>
-
+</section>
 <script>
 </script>
 @endsection

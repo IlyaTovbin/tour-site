@@ -65,6 +65,7 @@ class BlogController extends Controller
 
     public function show(Request $request, $id){
         $this->view_data['post'] = Blog::getPost($id);
+        $this->view_data['category'] = Category::getCategory($this->view_data['post']->categorie_id);
         $this->view_data['title'] = ' Post';
         return view('content/blog/blog_post_view', $this->view_data);
     }

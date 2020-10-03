@@ -4,7 +4,7 @@ namespace App\Models\content;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use DB;
+use DB, FileManager;
 
 class Blog extends Model
 {
@@ -38,28 +38,27 @@ class Blog extends Model
     }
 
     static public function store($request){
+            $file_name = FileManager::moveFile($request['image'], 'images\\blogs\\');
 
-            $name = $request['image']->getClientOriginalName();
-            $path = public_path('images\\blogs');
-            $file_name = pathinfo($name, PATHINFO_FILENAME) . date("-Y-m-d-H-i-s.")  . pathinfo($name, PATHINFO_EXTENSION);
-            $result = $request['image']->move($path, $file_name);
+            if($file_name){
+                $blog = new self();
+                $blog->categorie_id = $request['category'];
+                $blog->title = $request['title'];
+                $blog->body = serialize($request['summernote']);
+                $blog->image = $file_name;
+                $blog->save();
+                return true;
+            }
+            return false;
 
-            $blog = new self();
-            $blog->categorie_id = $request['category'];
-            $blog->title = $request['title'];
-            $blog->body = serialize($request['summernote']);
-            $blog->image = $file_name;
-            $blog->save();
-            return TRUE;
     }
 
     static public function deleteBlog($id){
         if(is_numeric($id)){
-            $query = DB::table('blogs')->where('id', $id);
-            if($query->first()){
-                $image = $query->select('image')->first();
-                $query->delete();
-                unlink(public_path('images\\blogs\\') . $image->image);
+            $query = DB::table('blogs')->where('id', $id)->select('image')->first();
+            if($query){
+                unlink(public_path('images\\blogs\\') . $query->image);
+                $query = DB::table('blogs')->where('id', $id)->delete();
             }
         }
     }
@@ -77,12 +76,22 @@ class Blog extends Model
     }
 
     static public function updatePost($request,int $id){
+
+        if($request['image']){
+            $path = 'images\\blogs\\';
+            $image = FileManager::moveFile($request['image'], $path);
+            unlink(public_path($path) . $request['check']);
+        }else{
+            $image = $request['check'];
+        }
+
         DB::table('blogs')
         ->where('id', '=', $id)
         ->update([
             'title' => $request['title'],
             'categorie_id' => $request['category'],
             'body' => serialize($request['summernote']),
+            'image' => $image,
             'updated_at' => Carbon::now()
         ]);
         return TRUE;

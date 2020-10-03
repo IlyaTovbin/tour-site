@@ -11,9 +11,10 @@
             <a class="btn btn-secondary" href="{{ url('/blog') }}">Назад</a>
         </div>
         <div>
-            <form action="{{ url("/blog/{$post->id}") }}" method="POST" onsubmit="return validateForm()" class="create-post-form">
+            <form action="{{ url("/blog/{$post->id}") }}" enctype="multipart/form-data" method="POST" onsubmit="return validateForm()" class="create-post-form">
                 {{ method_field('PUT') }}
                 @csrf
+                <input type="hidden" value="{{ $post->image }}" name="check" />
                 <div class="form-row">
                    <div class="form-group col-md-6">
                     <label for="title">Заголовок</label>
@@ -42,6 +43,16 @@
                     <div class="form-group col-md-12">
                         <textarea name="summernote" id="summernote">{{ $post->body ?? '' }}</textarea>
                         <span class="summernote-error text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="image">Фотография:</label>
+                        <br>
+                        <img src="{{ url('images/blogs/' . $post->image) }}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 dropdown-toggle img-fluid col-12 col-lg-2 mb-1" alt="Responsive image">
+                        <p>{{ $post->image }}</p>
+                        <input type="file" name="image" id="image">
+                        <p class="image-error text-danger"></p>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Редактировать</button>

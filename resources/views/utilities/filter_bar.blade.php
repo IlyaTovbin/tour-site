@@ -34,7 +34,7 @@
 <script>
     $('.filter-form').on('submit', function(e){
         e.preventDefault();
-        let filterBy = $('.select-option').val();
+        let filterBy = $('.select-option-filterBy').val();
         let active = $('.select-by-active').val();
         let filterByCreated = $('.select-by-newest').val();
         let search = $('.input-search').val();
@@ -47,7 +47,6 @@
         var search = location.search.substring(1);
         if(search){
             search = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
-            console.log(search)
             $('.select-by-newest option[value='+ search.filterByCreated +']').attr('selected','selected');
             if(search.filterBy){
                 $('.select-option-filterBy option[value='+ search.filterBy +']').attr('selected','selected');
