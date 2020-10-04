@@ -69,6 +69,7 @@
         let title = $('#title').val();
         let category = parseInt($('#category').val());
         let summernote = $('#summernote').val();
+        console.log(summernote);
         if(title.length < 2){
             $('.title').text('пожалуйста заполните это поле');
             valid = false;
@@ -94,15 +95,46 @@
             $('.image-error').text('пожалуйста заполните это поле');
             valid = false;
         }
-        if(valid) return true;
+        if(valid){
+            return true;
+        } 
         return false;
 
     }
 
+    const UPLOAD_BLOG_URL = "{{ url('/ajaxRequest/blog') }}";
 
     $('#summernote').summernote({
-      tabsize: 2,
-      height: 200
+        tabsize: 2,
+        height: 400,
+        callbacks: {
+            onImageUpload : function(file) {
+                let form_data = new FormData();
+                form_data.append('file', file[0]);
+                form_data.append('method', 'imageUpload');
+                form_data.append('_token', '{{ csrf_token() }}');
+                $.ajax({
+                    url: UPLOAD_BLOG_URL,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: form_data,                         
+                    type: 'post',
+                    success: function(image){
+                        url = "{{ url('images/blogs/') }}" + '/' + image;;
+                        $('#summernote').summernote('editor.insertImage', url);
+                    }
+                });
+            },
+            onMediaDelete: function(value){
+                data = {
+                    method: 'removeFileFrom',
+                    fileName: value[0].currentSrc
+                }
+                sendAjax(data, UPLOAD_BLOG_URL, false);
+            }
+        }
     });
+
   </script>
 @endsection

@@ -2,12 +2,12 @@ $('.non-target').on('click', function(e){
     e.preventDefault();
 })
 
-function sendAjax(data, url, reload = true, type = 'get'){
+function sendAjax(data, url, reload = true, type = 'get', datatype = 'html'){
     $.ajax({
         type: type,
         url: url,
         data: data,
-        datatype:'html',
+        datatype: datatype,
         success: function (data) {
             if(reload) location.reload();
         },

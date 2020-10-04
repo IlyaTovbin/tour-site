@@ -109,4 +109,14 @@ class Blog extends Model
         return TRUE;
     }
 
+    static public function imageUpload($file){
+        $file_name = FileManager::moveFile($file, 'images\\blogs\\');
+        echo $file_name;
+    }
+
+    static public function removeFileFrom($file_name){
+        $file_name = explode('/', $file_name);
+        unlink(public_path('images\\blogs\\') . $file_name[count($file_name)-1]);
+    }
+
 }

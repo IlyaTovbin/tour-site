@@ -22,12 +22,20 @@ class BlogController extends Controller
     }
 
     public function ajaxRequest(Request $request){
-        if(in_array( $request['method'], ['deleteBlog', 'activePost'])){
+        if(in_array( $request['method'], ['deleteBlog', 'activePost', 'imageUpload', 'removeFileFrom'])){
             $method = $request['method'];
             $this->$method($request);
         }else{
             return 'Error';
         }
+    }
+
+    public function removeFileFrom($request){
+        Blog::removeFileFrom($request['fileName']);
+    }
+
+    public function imageUpload($request){
+        Blog::imageUpload($request['file']);
     }
 
     public function activePost(Request $request){

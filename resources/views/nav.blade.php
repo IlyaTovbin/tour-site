@@ -48,7 +48,7 @@
           </a>
       </li>
         <li class="nav-item">
-            <a class="nav-link nav-link-a {{ $faq ?? '' }}" href="{{ url('/faq') }}">
+            <a class="nav-link nav-link-a {{ $faq_nav ?? '' }}" href="{{ url('/faq') }}">
                 <span data-feather="file-text"></span>
                 FAQ
             </a>
