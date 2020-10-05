@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\content\Category;
 use App\Models\content\Blog;
 use App\Http\Requests\BlogRequest;
+use Session, FileManager;
 
 class BlogController extends Controller
 {
@@ -47,6 +48,8 @@ class BlogController extends Controller
     }
 
     public function create(){
+        Session::forget('files');
+        FileManager::cleanUselessFiles(public_path('images\\blogs\\content_images\\'));
         $this->view_data['title'] .= ' Create';
         $this->view_data['categories'] = Category::getCategories();
         return view('content/blog/blog_create', $this->view_data);
@@ -59,6 +62,7 @@ class BlogController extends Controller
     }
 
     public function edit(Request $request, $id){
+        Session::forget('files');
         $this->view_data['post'] = Blog::getPost($id);
         $this->view_data['title'] .= ' Edit';
         $this->view_data['categories'] = Category::getCategories();

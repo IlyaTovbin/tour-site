@@ -4,7 +4,7 @@ namespace App\Models\content;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use DB, FileManager;
+use DB, FileManager, Session;
 
 class Blog extends Model
 {
@@ -38,26 +38,37 @@ class Blog extends Model
     }
 
     static public function store($request){
-            $file_name = FileManager::moveFile($request['image'], 'images\\blogs\\');
-
-            if($file_name){
-                $blog = new self();
-                $blog->categorie_id = $request['category'];
-                $blog->title = $request['title'];
-                $blog->body = serialize($request['summernote']);
-                $blog->image = $file_name;
-                $blog->save();
-                return true;
-            }
-            return false;
+        $data_content = $request['summernote'];
+        $file_name = FileManager::moveFile($request['image'], 'images\\blogs\\');
+        if(Session::has('files')){
+            $images_content = [];
+            FileManager::addContentImages('images\\blogs\\content_images\\', $data_content, $images_content);
+        }
+        if($file_name){
+            $blog = new self();
+            $blog->categorie_id = $request['category'];
+            $blog->title = $request['title'];
+            $blog->body = serialize($data_content);
+            $blog->image = $file_name;
+            $blog->content_images = isset($images_content) ? serialize($images_content) : null;
+            $blog->save();
+            return true;
+        }
+        return false;
 
     }
 
     static public function deleteBlog($id){
         if(is_numeric($id)){
-            $query = DB::table('blogs')->where('id', $id)->select('image')->first();
+            $query = DB::table('blogs')->where('id', $id)->select('image', 'content_images')->first();
             if($query){
                 unlink(public_path('images\\blogs\\') . $query->image);
+                if($query->content_images){
+                    $images = unserialize($query->content_images);
+                    foreach($images as $image){
+                        unlink(public_path('images\\blogs\\content_images\\') . $image);
+                    }
+                }
                 $query = DB::table('blogs')->where('id', $id)->delete();
             }
         }
@@ -77,6 +88,8 @@ class Blog extends Model
 
     static public function updatePost($request,int $id){
 
+        $data_content = $request['summernote'];
+
         if($request['image']){
             $path = 'images\\blogs\\';
             $image = FileManager::moveFile($request['image'], $path);
@@ -85,13 +98,21 @@ class Blog extends Model
             $image = $request['check'];
         }
 
+        $images_content = DB::table('blogs')->where('id', $id)->select('content_images')->first();
+
+        if(Session::has('files')){
+            $images_content = $images_content->content_images ? unserialize($images_content->content_images) : [];
+            FileManager::addContentImages('images\\blogs\\content_images\\', $data_content, $images_content);
+        }
+
         DB::table('blogs')
         ->where('id', '=', $id)
         ->update([
             'title' => $request['title'],
             'categorie_id' => $request['category'],
-            'body' => serialize($request['summernote']),
+            'body' => serialize($data_content),
             'image' => $image,
+            'content_images' => (isset($images_content) && !empty($images_content)) ? serialize($images_content) : null, 
             'updated_at' => Carbon::now()
         ]);
         return TRUE;
@@ -110,13 +131,31 @@ class Blog extends Model
     }
 
     static public function imageUpload($file){
-        $file_name = FileManager::moveFile($file, 'images\\blogs\\');
+        $file_name = FileManager::moveFile($file, 'images\\blogs\\content_images\\');
+        $src_ar = [];
+        $src_ar[] = $file_name;
+        if(Session::has('files')){
+            $data = Session::get('files');
+            foreach($data as $item){
+                $src_ar[] = $item;
+            }
+        }
+        Session::put('files', $src_ar);
         echo $file_name;
     }
 
     static public function removeFileFrom($file_name){
+
         $file_name = explode('/', $file_name);
-        unlink(public_path('images\\blogs\\') . $file_name[count($file_name)-1]);
+        $file_name = $file_name[count($file_name)-1];
+
+        $data = Session::get('files');
+        Session::forget('files');
+        $key = array_search($file_name, $data);
+        unset($data[$key]);
+        Session::put('files', $data);
+
+        unlink(public_path('images\\blogs\\content_images\\') . $file_name);
     }
 
 }

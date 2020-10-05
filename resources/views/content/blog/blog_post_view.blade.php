@@ -22,9 +22,7 @@
 </section>
 <section class="py-6">
 <div class="container">
-    <div class="">
         {!! $clean_html !!}
-    </div>
 </div>
 </section>
 <script>

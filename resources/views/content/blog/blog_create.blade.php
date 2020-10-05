@@ -121,7 +121,7 @@
                     data: form_data,                         
                     type: 'post',
                     success: function(image){
-                        url = "{{ url('images/blogs/') }}" + '/' + image;;
+                        url = "{{ url('images/blogs/content_images') }}" + '/' + image;;
                         $('#summernote').summernote('editor.insertImage', url);
                     }
                 });
