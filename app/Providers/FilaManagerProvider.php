@@ -16,35 +16,6 @@ class FilaManagerProvider extends ServiceProvider
         return false;
     }
 
-    static public function addContentImages($path, &$data_content, &$images_content){
-        $images_name = Session::get('files');
-        $path = public_path($path);
-        foreach($images_name as $iname){
-            rename($path . $iname, $path . 'sm-' . $iname);
-            $images_content[] = 'sm-' . $iname;
-            $data_content = str_replace( $iname, 'sm-' . $iname, $data_content);
-        }
-    }
-
-    static public function cleanUselessFiles($path){
-        $files = scandir($path);
-        foreach($files as $key => $file){
-            if($key > 1 && strpos($file, 'sm-') === false){
-                unlink($path . $file);
-            }
-        }
-    }
-
-    static public function removeFileFromSM(&$file_name){
-        $file_name = explode('/', $file_name);
-        $file_name = $file_name[count($file_name)-1];
-        $data = Session::get('files');
-        Session::forget('files');
-        $key = array_search($file_name, $data);
-        unset($data[$key]);
-        Session::put('files', $data);
-    }
-
     static public function imageUploadToSM($file_name){
         $src_ar = [];
         $src_ar[] = $file_name;
@@ -56,5 +27,80 @@ class FilaManagerProvider extends ServiceProvider
         }
         Session::put('files', $src_ar);
     }
+
+    static public function addContentImages($path, &$data_content, &$images_content){
+        $images_name = Session::get('files');
+        $path = public_path($path);
+        foreach($images_name as $iname){
+            if(file_exists($path . $iname)){
+                rename($path . $iname, $path . 'sm-' . $iname);
+                $images_content[] = 'sm-' . $iname;
+                $data_content = str_replace( $iname, 'sm-' . $iname, $data_content);
+            }
+        }
+    }
+
+
+    static public function cleanUselessFiles($path){
+        $files = scandir($path);
+        foreach($files as $key => $file){
+            if($key > 1 && strpos($file, 'sm-') === false){
+                unlink($path . $file);
+            }
+        }
+    }
+
+    static public function removeFileFromSM(&$file_name){
+
+        $file_name = explode('/', $file_name);
+        $file_name = $file_name[count($file_name)-1];
+
+        $data = Session::get('files');
+        Session::forget('files');
+        $key = array_search($file_name, $data);
+        unset($data[$key]);
+        if(!empty($data)){
+            Session::put('files', $data);
+        }
+
+    }
+
+    // static public function imageUploadToSM($file_name){
+    //     $src_ar = [];
+    //     $src_ar[] = $file_name;
+    //     if(Session::has('files') && is_array(Session::get('files'))){
+    //         $data = Session::get('files');
+    //         foreach($data as $item){
+    //             $src_ar[] = $item;
+    //         }
+    //         Session::put('files', $src_ar);
+    //     }else{
+    //         $src_ar[] = Session::get('files');
+    //         Session::put('files', $src_ar);
+    //     }
+        
+    // }
+
+    static public function setFilesSession($files){
+        if(!$files) return false;
+        Session::put('files', unserialize($files));
+    }
+
+    // static public function checkContentAndImages($content, $content_images){
+    //     $updated_content_images = [];
+    //     if(!empty($content_images) && is_array($content_images)){
+    //         foreach($content_images as $image){
+    //             if(strpos($content, $image) !== false){
+    //                 $updated_content_images = $image;
+    //             }
+    //         }
+    //     }else{
+    //         if(strpos($content, $content_images) !== false){
+    //             $updated_content_images = $content_images;
+    //         }
+    //     }
+
+    //     return empty($updated_content_images) ? null : $updated_content_images;
+    // }
     
 }

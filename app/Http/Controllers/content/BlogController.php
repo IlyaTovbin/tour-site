@@ -64,6 +64,7 @@ class BlogController extends Controller
     public function edit(Request $request,int $id){
         Session::forget('files');
         $this->view_data['post'] = Blog::getPost($id);
+        FileManager::setFilesSession($this->view_data['post']->content_images);
         $this->view_data['title'] .= ' Edit';
         $this->view_data['categories'] = Category::getCategories();
         return view('content/blog/blog_edit', $this->view_data);

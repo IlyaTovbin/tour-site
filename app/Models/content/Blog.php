@@ -92,7 +92,6 @@ class Blog extends Model
     static public function updatePost($request,int $id){
 
         $data_content = $request['summernote'];
-
         if($request['image']){
             $path = 'images\\blogs\\';
             $image = FileManager::moveFile($request['image'], $path);
@@ -101,12 +100,14 @@ class Blog extends Model
             $image = $request['check'];
         }
 
-        $images_content = DB::table('blogs')->where('id', $id)->select('content_images')->first();
+        // $images_content = DB::table('blogs')->where('id', $id)->select('content_images')->first();
+        // $images_content = $images_content->content_images ? unserialize($images_content->content_images) : [];
 
-        if(Session::has('files')){
-            $images_content = $images_content->content_images ? unserialize($images_content->content_images) : [];
-            FileManager::addContentImages('images\\blogs\\content_images\\', $data_content, $images_content);
-        }
+        // if(Session::has('files') && !empty(Session::get('files'))){
+        //     FileManager::addContentImages('images\\blogs\\content_images\\', $data_content, $images_content);
+        // }
+
+        // $images_content = FileManager::checkContentAndImages($data_content, $images_content);
 
         DB::table('blogs')
         ->where('id', '=', $id)
@@ -115,7 +116,7 @@ class Blog extends Model
             'categorie_id' => $request['category'],
             'body' => serialize($data_content),
             'image' => $image,
-            'content_images' => (isset($images_content) && !empty($images_content)) ? serialize($images_content) : null, 
+            'content_images' => $images_content ? serialize($images_content) : null, 
             'updated_at' => Carbon::now()
         ]);
         return TRUE;
@@ -140,7 +141,6 @@ class Blog extends Model
     }
 
     static public function removeFileFrom($file_name){
-
         FileManager::removeFileFromSM($file_name);
         unlink(public_path('images\\blogs\\content_images\\') . $file_name);
     }

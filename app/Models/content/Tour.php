@@ -103,6 +103,37 @@ class Tour extends Model
         }
     }
 
+    static public function updateTour($request, $id){
+        $data_content = $request['summernote'];
+
+        // if($request['image']){
+        //     $path = 'images\\blogs\\';
+        //     $image = FileManager::moveFile($request['image'], $path);
+        //     unlink(public_path($path) . $request['check']);
+        // }else{
+        //     $image = $request['check'];
+        // }
+
+        $images_content = DB::table('tours')->where('id', $id)->select('content_images')->first();
+
+        if(Session::has('files')){
+            $images_content = $images_content->content_images ? unserialize($images_content->content_images) : [];
+            FileManager::addContentImages('images\\tours\\content_images\\', $data_content, $images_content);
+        }
+
+        DB::table('tours')
+        ->where('id', '=', $id)
+        ->update([
+            'title' => $request['title'],
+            'body' => serialize($data_content),
+            'images' => null,
+            'content_images' => (isset($images_content) && !empty($images_content)) ? serialize($images_content) : null,
+            'google_maps' =>  $request['google_maps'],
+            'updated_at' => Carbon::now()
+        ]);
+        return TRUE;
+    }
+
     static public function imageUpload($file){
         $file_name = FileManager::moveFile($file, 'images\\tours\\content_images\\');
         FileManager::imageUploadToSM($file_name);

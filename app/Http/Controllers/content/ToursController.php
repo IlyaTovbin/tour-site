@@ -37,6 +37,12 @@ class ToursController extends Controller
         }
     }
 
+    public function update(TourRequest $request, $id){
+        if(Tour::updateTour($request, $id)){
+            return redirect('/tour');
+        }
+    }
+
     public function ajaxRequest(Request $request){
 
         if(in_array( $request['method'], ['activeTour', 'deleteTour', 'imageUpload', 'removeFileFrom'])){
