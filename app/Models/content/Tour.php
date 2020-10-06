@@ -6,26 +6,30 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 use Carbon\Carbon;
-use DB;
+use DB, FileManager, Session;
 
 class Tour extends Model
 {
     static public function store($request){
+        $data_content = $request['summernote'];
+
         if($request['file']){
             $file_names = [];
             foreach($request['file'] as $file){
-                $name = $file->getClientOriginalName();
-                $path = public_path('images\\tours');
-                $file_name = pathinfo($name, PATHINFO_FILENAME) . date("-Y-m-d-H-i-s.")  . pathinfo($name, PATHINFO_EXTENSION);
-                $result = $file->move($path, $file_name);
-                $file_names[] = $file_name;
+                $file_names[] = FileManager::moveFile($file, 'images\\tours\\');
             }
+        }
+
+        if(Session::has('files')){
+            $images_content = [];
+            FileManager::addContentImages('images\\tours\\content_images\\', $data_content, $images_content);
         }
 
         $tour = new self();
         $tour->title = $request['title'];
-        $tour->body = serialize($request['summernote']);
+        $tour->body = serialize($data_content);
         $tour->images = isset($file_names) ? serialize($file_names) : null;
+        $tour->content_images = isset($images_content) ? serialize($images_content) : null;
         $tour->google_maps = $request['google_maps'] ? serialize($request['google_maps']) : null;
         $tour->save();
         return TRUE;
@@ -68,9 +72,20 @@ class Tour extends Model
 
     static public function deleteTour($id){
         if(is_numeric($id)){
-            $query = DB::table('tours')->where('id', $id);
-            if($query->first()){
-                $query->delete();
+            $query = DB::table('tours')->where('id', $id)->select('images', 'content_images')->first();
+            if($query){
+                $gallery = unserialize($query->images);
+                foreach($gallery as $image){
+                    unlink(public_path('images\\tours\\') . $image);
+                }
+                if($query->content_images){
+                    $images = unserialize($query->content_images);
+                    foreach($images as $image){
+                        unlink(public_path('images\\tours\\content_images\\') . $image);
+                    }
+                }
+
+                $query = DB::table('tours')->where('id', $id)->delete();
             }
         }
     }
@@ -86,5 +101,16 @@ class Tour extends Model
             $tour->google_maps = unserialize($tour->google_maps);
             return $tour;
         }
+    }
+
+    static public function imageUpload($file){
+        $file_name = FileManager::moveFile($file, 'images\\tours\\content_images\\');
+        FileManager::imageUploadToSM($file_name);
+        echo $file_name;
+    }
+
+    static public function removeFileFrom($file_name){
+        FileManager::removeFileFromSM($file_name);
+        unlink(public_path('images\\tours\\content_images\\') . $file_name);
     }
 }

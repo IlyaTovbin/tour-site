@@ -21,8 +21,11 @@ class CategoryController extends Controller
 
     public function show(Request $request, $id){
         $this->view_data['category'] = Category::getCategory($id);
-        $this->view_data['title'] = ' Category';
-        return view('content/category/category_view', $this->view_data);
+        if($this->view_data['category']){
+            $this->view_data['title'] = ' Category';
+            return view('content/category/category_view', $this->view_data);
+        }
+        return abort(404);
     }
 
     public function create(){

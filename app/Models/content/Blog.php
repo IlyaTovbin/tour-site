@@ -81,9 +81,12 @@ class Blog extends Model
             ->where('b.id', '=', $id)
             ->select('b.*', 'c.name as category')
             ->first();
+            if(empty($post)) return false;
             $post->body = unserialize($post->body);
             return $post;
         }
+        return false;
+
     }
 
     static public function updatePost($request,int $id){
@@ -132,29 +135,13 @@ class Blog extends Model
 
     static public function imageUpload($file){
         $file_name = FileManager::moveFile($file, 'images\\blogs\\content_images\\');
-        $src_ar = [];
-        $src_ar[] = $file_name;
-        if(Session::has('files')){
-            $data = Session::get('files');
-            foreach($data as $item){
-                $src_ar[] = $item;
-            }
-        }
-        Session::put('files', $src_ar);
+        FileManager::imageUploadToSM($file_name);
         echo $file_name;
     }
 
     static public function removeFileFrom($file_name){
 
-        $file_name = explode('/', $file_name);
-        $file_name = $file_name[count($file_name)-1];
-
-        $data = Session::get('files');
-        Session::forget('files');
-        $key = array_search($file_name, $data);
-        unset($data[$key]);
-        Session::put('files', $data);
-
+        FileManager::removeFileFromSM($file_name);
         unlink(public_path('images\\blogs\\content_images\\') . $file_name);
     }
 

@@ -34,5 +34,27 @@ class FilaManagerProvider extends ServiceProvider
             }
         }
     }
+
+    static public function removeFileFromSM(&$file_name){
+        $file_name = explode('/', $file_name);
+        $file_name = $file_name[count($file_name)-1];
+        $data = Session::get('files');
+        Session::forget('files');
+        $key = array_search($file_name, $data);
+        unset($data[$key]);
+        Session::put('files', $data);
+    }
+
+    static public function imageUploadToSM($file_name){
+        $src_ar = [];
+        $src_ar[] = $file_name;
+        if(Session::has('files')){
+            $data = Session::get('files');
+            foreach($data as $item){
+                $src_ar[] = $item;
+            }
+        }
+        Session::put('files', $src_ar);
+    }
     
 }

@@ -79,7 +79,8 @@ class Category extends Model
     }
 
     static public function getCategory($id){
-        if(is_numeric($id)) return DB::table('categories')->where('id', $id)->first();
+        if(is_numeric($id))
+            return DB::table('categories')->where('id', $id)->first() ? DB::table('categories')->where('id', $id)->first() : false;
     }
 
     static public function editCategory($id, $name){

@@ -47,6 +47,10 @@ class FaqController extends Controller
         }
     }
 
+    public function show(Request $request, $id){
+        return abort(404);
+    }
+
     public function edit(Request $request, $id){
         $this->view_data['faq'] = Faq::getFaq($id);
         $this->view_data['title'] .= ' Edit';

@@ -61,7 +61,7 @@ class BlogController extends Controller
         }
     }
 
-    public function edit(Request $request, $id){
+    public function edit(Request $request,int $id){
         Session::forget('files');
         $this->view_data['post'] = Blog::getPost($id);
         $this->view_data['title'] .= ' Edit';
@@ -77,8 +77,11 @@ class BlogController extends Controller
 
     public function show(Request $request, $id){
         $this->view_data['post'] = Blog::getPost($id);
-        $this->view_data['category'] = Category::getCategory($this->view_data['post']->categorie_id);
-        $this->view_data['title'] = ' Post';
-        return view('content/blog/blog_post_view', $this->view_data);
+        if($this->view_data['post']){
+            $this->view_data['category'] = Category::getCategory($this->view_data['post']->categorie_id);
+            $this->view_data['title'] = ' Post';
+            return view('content/blog/blog_post_view', $this->view_data);
+        }
+        return abort(404);
     }
 }
