@@ -28,16 +28,26 @@ class FilaManagerProvider extends ServiceProvider
         Session::put('files', $src_ar);
     }
 
-    static public function addContentImages($path, &$data_content, &$images_content){
+    //upgrade summernote content images with and 'sm-' to image name;
+    static public function addContentImages($path, $data_content){
         $images_name = Session::get('files');
+        $new_names = [];
         $path = public_path($path);
         foreach($images_name as $iname){
             if(file_exists($path . $iname)){
-                rename($path . $iname, $path . 'sm-' . $iname);
-                $images_content[] = 'sm-' . $iname;
-                $data_content = str_replace( $iname, 'sm-' . $iname, $data_content);
+                if(strpos($iname, 'sm-') === false){
+                    rename($path . $iname, $path . 'sm-' . $iname);
+                    $new_names[] = 'sm-' . $iname;
+                    $data_content = str_replace( $iname, 'sm-' . $iname, $data_content);
+
+                }else{
+                    $new_names[] = $iname;
+                }   
             }
         }
+        Session::forget('files');
+        Session::put('files', $new_names);
+        return $data_content;
     }
 
 
@@ -86,21 +96,24 @@ class FilaManagerProvider extends ServiceProvider
         Session::put('files', unserialize($files));
     }
 
-    // static public function checkContentAndImages($content, $content_images){
-    //     $updated_content_images = [];
-    //     if(!empty($content_images) && is_array($content_images)){
-    //         foreach($content_images as $image){
-    //             if(strpos($content, $image) !== false){
-    //                 $updated_content_images = $image;
-    //             }
-    //         }
-    //     }else{
-    //         if(strpos($content, $content_images) !== false){
-    //             $updated_content_images = $content_images;
-    //         }
-    //     }
 
-    //     return empty($updated_content_images) ? null : $updated_content_images;
-    // }
+
+    static public function margeContentImages($content, $content_images = []){
+        if(Session::has('files')){
+            $updated_content_images = [];
+            $images_name = Session::get('files');
+            if(!empty($content_images)){
+                $images_name = array_merge($images_name, $content_images);
+            }
+            foreach($images_name as $image){
+                if(strpos($content, $image)){
+                    $updated_content_images[] = $image;
+                }
+            }
+            Session::forget('files');
+            return array_unique($updated_content_images);
+        }
+        return false;
+    }
     
 }

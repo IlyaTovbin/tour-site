@@ -128,7 +128,7 @@
             onMediaDelete: function(value){
                 data = {
                     method: 'removeFileFrom',
-                    fileName: value[0].currentSrc
+                    fileName: value[0].currentSrc,
                 }
                 sendAjax(data, UPLOAD_BLOG_URL, false);
             }

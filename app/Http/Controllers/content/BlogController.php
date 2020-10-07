@@ -31,6 +31,7 @@ class BlogController extends Controller
         }
     }
 
+
     public function removeFileFrom($request){
         Blog::removeFileFrom($request['fileName']);
     }

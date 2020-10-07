@@ -41,16 +41,16 @@ class Blog extends Model
         $data_content = $request['summernote'];
         $file_name = FileManager::moveFile($request['image'], 'images\\blogs\\');
         if(Session::has('files')){
-            $images_content = [];
-            FileManager::addContentImages('images\\blogs\\content_images\\', $data_content, $images_content);
+            $data_content = FileManager::addContentImages('images\\blogs\\content_images\\', $data_content);
         }
+        $images_content = FileManager::margeContentImages($data_content);
         if($file_name){
             $blog = new self();
             $blog->categorie_id = $request['category'];
             $blog->title = $request['title'];
             $blog->body = serialize($data_content);
             $blog->image = $file_name;
-            $blog->content_images = isset($images_content) ? serialize($images_content) : null;
+            $blog->content_images = $images_content ? serialize($images_content) : null;
             $blog->save();
             return true;
         }
@@ -99,16 +99,15 @@ class Blog extends Model
         }else{
             $image = $request['check'];
         }
+        
+        $images_content = DB::table('blogs')->where('id', $id)->select('content_images')->first();
+        $images_content = $images_content->content_images ? unserialize($images_content->content_images) : [];
 
-        // $images_content = DB::table('blogs')->where('id', $id)->select('content_images')->first();
-        // $images_content = $images_content->content_images ? unserialize($images_content->content_images) : [];
+        if(Session::has('files')){
+            $data_content = FileManager::addContentImages('images\\blogs\\content_images\\', $data_content);
+        }
 
-        // if(Session::has('files') && !empty(Session::get('files'))){
-        //     FileManager::addContentImages('images\\blogs\\content_images\\', $data_content, $images_content);
-        // }
-
-        // $images_content = FileManager::checkContentAndImages($data_content, $images_content);
-
+        $images_content = FileManager::margeContentImages($data_content, $images_content);
         DB::table('blogs')
         ->where('id', '=', $id)
         ->update([
