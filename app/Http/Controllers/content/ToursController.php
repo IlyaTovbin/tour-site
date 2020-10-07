@@ -39,7 +39,7 @@ class ToursController extends Controller
 
     public function update(TourRequest $request, $id){
         if(Tour::updateTour($request, $id)){
-            return redirect('/tour');
+            return redirect('/tours');
         }
     }
 
@@ -72,6 +72,7 @@ class ToursController extends Controller
     public function edit(Request $request, $id){
         Session::forget('files');
         $this->view_data['tour'] = Tour::getTour($id);
+        FileManager::setFilesSession($this->view_data['tour']->content_images);
         $this->view_data['title'] .= ' Edit';
         return view('content/tours/tours_edit', $this->view_data);
     }

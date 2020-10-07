@@ -19,17 +19,16 @@ class Tour extends Model
                 $file_names[] = FileManager::moveFile($file, 'images\\tours\\');
             }
         }
-
         if(Session::has('files')){
-            $images_content = [];
-            FileManager::addContentImages('images\\tours\\content_images\\', $data_content, $images_content);
+            $data_content = FileManager::addContentImages('images\\tours\\content_images\\', $data_content);
         }
+        $images_content = FileManager::margeContentImages($data_content);
 
         $tour = new self();
         $tour->title = $request['title'];
         $tour->body = serialize($data_content);
         $tour->images = isset($file_names) ? serialize($file_names) : null;
-        $tour->content_images = isset($images_content) ? serialize($images_content) : null;
+        $tour->content_images = $images_content ? serialize($images_content) : null;
         $tour->google_maps = $request['google_maps'] ? serialize($request['google_maps']) : null;
         $tour->save();
         return TRUE;
@@ -97,7 +96,7 @@ class Tour extends Model
             ->select('t.*')
             ->first();
             $tour->body = unserialize($tour->body);
-            $tour->images = unserialize($tour->images);
+            $tour->images = $tour->images ? unserialize($tour->images) : null;
             $tour->google_maps = unserialize($tour->google_maps);
             return $tour;
         }
@@ -106,29 +105,22 @@ class Tour extends Model
     static public function updateTour($request, $id){
         $data_content = $request['summernote'];
 
-        // if($request['image']){
-        //     $path = 'images\\blogs\\';
-        //     $image = FileManager::moveFile($request['image'], $path);
-        //     unlink(public_path($path) . $request['check']);
-        // }else{
-        //     $image = $request['check'];
-        // }
-
         $images_content = DB::table('tours')->where('id', $id)->select('content_images')->first();
+        $images_content = $images_content->content_images ? unserialize($images_content->content_images) : [];
 
         if(Session::has('files')){
-            $images_content = $images_content->content_images ? unserialize($images_content->content_images) : [];
-            FileManager::addContentImages('images\\tours\\content_images\\', $data_content, $images_content);
+            $data_content = FileManager::addContentImages('images\\tours\\content_images\\', $data_content);
         }
 
+        $images_content = FileManager::margeContentImages($data_content, $images_content);
         DB::table('tours')
         ->where('id', '=', $id)
         ->update([
             'title' => $request['title'],
             'body' => serialize($data_content),
             'images' => null,
-            'content_images' => (isset($images_content) && !empty($images_content)) ? serialize($images_content) : null,
-            'google_maps' =>  $request['google_maps'],
+            'content_images' => $images_content ? serialize($images_content) : null, 
+            'google_maps' =>  $request['google_maps'] ? serialize($request['google_maps']) : null,
             'updated_at' => Carbon::now()
         ]);
         return TRUE;

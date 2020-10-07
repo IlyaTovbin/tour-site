@@ -75,21 +75,6 @@ class FilaManagerProvider extends ServiceProvider
 
     }
 
-    // static public function imageUploadToSM($file_name){
-    //     $src_ar = [];
-    //     $src_ar[] = $file_name;
-    //     if(Session::has('files') && is_array(Session::get('files'))){
-    //         $data = Session::get('files');
-    //         foreach($data as $item){
-    //             $src_ar[] = $item;
-    //         }
-    //         Session::put('files', $src_ar);
-    //     }else{
-    //         $src_ar[] = Session::get('files');
-    //         Session::put('files', $src_ar);
-    //     }
-        
-    // }
 
     static public function setFilesSession($files){
         if(!$files) return false;
