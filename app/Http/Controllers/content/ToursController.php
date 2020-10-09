@@ -45,12 +45,16 @@ class ToursController extends Controller
 
     public function ajaxRequest(Request $request){
 
-        if(in_array( $request['method'], ['activeTour', 'deleteTour', 'imageUpload', 'removeFileFrom'])){
+        if(in_array( $request['method'], ['activeTour', 'deleteTour', 'imageUpload', 'removeFileFrom', 'deleteImage'])){
             $method = $request['method'];
             $this->$method($request);
         }else{
             return 'Error';
         }
+    }
+
+    public function deleteImage($request){
+        Tour::deleteImage($request);
     }
 
     public function removeFileFrom($request){
@@ -75,5 +79,14 @@ class ToursController extends Controller
         FileManager::setFilesSession($this->view_data['tour']->content_images);
         $this->view_data['title'] .= ' Edit';
         return view('content/tours/tours_edit', $this->view_data);
+    }
+
+    public function show(Request $request, $id){
+        $this->view_data['tour'] = Tour::getTour($id);
+        if($this->view_data['tour']){
+            $this->view_data['title'] = ' Tour';
+            return view('content/tours/tours_view', $this->view_data);
+        }
+        return abort(404);
     }
 }

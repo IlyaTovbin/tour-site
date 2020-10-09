@@ -2,7 +2,7 @@ $('.non-target').on('click', function(e){
     e.preventDefault();
 })
 
-function sendAjax(data, url, reload = true, type = 'get', datatype = 'html'){
+function sendAjax(data, url, reload = true, type = 'get', datatype = 'html', func = null){
     $.ajax({
         type: type,
         url: url,
@@ -10,6 +10,7 @@ function sendAjax(data, url, reload = true, type = 'get', datatype = 'html'){
         datatype: datatype,
         success: function (data) {
             if(reload) location.reload();
+            if(func) func(data);
         },
         error: function (jqXhr, textStatus, errorMessage) {
             console.log(errorMessage);     

@@ -26,6 +26,7 @@ class Tour extends Model
 
         $tour = new self();
         $tour->title = $request['title'];
+        $tour->location = $request['location'];
         $tour->body = serialize($data_content);
         $tour->images = isset($file_names) ? serialize($file_names) : null;
         $tour->content_images = $images_content ? serialize($images_content) : null;
@@ -105,6 +106,19 @@ class Tour extends Model
     static public function updateTour($request, $id){
         $data_content = $request['summernote'];
 
+        if($request['file']){
+            $file_names = [];
+            foreach($request['file'] as $file){
+                $file_names[] = FileManager::moveFile($file, 'images\\tours\\');
+            }
+        }
+        $images_gallery = DB::table('tours')->where('id', '=', $id)->select('images')->first();
+        if($request['file']){
+            $images_gallery = array_merge(unserialize($images_gallery->images), $file_names);
+        }else{
+            $images_gallery = unserialize($images_gallery->images);
+        }
+        
         $images_content = DB::table('tours')->where('id', $id)->select('content_images')->first();
         $images_content = $images_content->content_images ? unserialize($images_content->content_images) : [];
 
@@ -117,8 +131,9 @@ class Tour extends Model
         ->where('id', '=', $id)
         ->update([
             'title' => $request['title'],
+            'location' => $request['location'],
             'body' => serialize($data_content),
-            'images' => null,
+            'images' => serialize($images_gallery),
             'content_images' => $images_content ? serialize($images_content) : null, 
             'google_maps' =>  $request['google_maps'] ? serialize($request['google_maps']) : null,
             'updated_at' => Carbon::now()
@@ -135,5 +150,22 @@ class Tour extends Model
     static public function removeFileFrom($file_name){
         FileManager::removeFileFromSM($file_name);
         unlink(public_path('images\\tours\\content_images\\') . $file_name);
+    }
+
+    static public function deleteImage($request){
+        if(!is_numeric($request['id'])) return false;
+        $images = DB::table('tours')->where('id', '=', $request['id'])->select('images')->first();
+        if(!$images) return false;
+        $images = unserialize($images->images);
+        $key = array_search($request['image'], $images);
+        unlink(public_path('images\\tours\\') . $request['image']);
+        unset($images[$key]);
+        DB::table('tours')
+        ->where('id', '=', $request['id'])
+        ->update([
+            'images' => !empty($images) ? serialize($images) : null,
+            'updated_at' => Carbon::now()
+        ]);
+        echo $request['image'];
     }
 }

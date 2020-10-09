@@ -15,8 +15,9 @@ class TourRequest extends FormRequest
     {   
         return [
             'title' => 'required|min:2',
+            'location' => 'required|min:2',
             'summernote' => 'required|min:2',
-            'file' => 'nullable',
+            'file' => 'required|',
             'google_maps' => 'nullable',
         ];
     }

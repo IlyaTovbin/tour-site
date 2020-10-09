@@ -21,6 +21,13 @@
                    </div>
                 </div>
                 <div class="form-row">
+                    <div class="form-group col-md-6">
+                     <label for="location">Локация: <small>(Москва, Россия)</small></label>
+                     <input type="text" class="form-control" name="location" id="location" placeholder="">
+                     <span class="text-danger location"></span>
+                    </div>
+                 </div>
+                <div class="form-row">
                     <div class="form-group col-md-12">
                         <label for="summernote">Контент:</label>
                         <textarea name="summernote" id="summernote"></textarea>
@@ -29,14 +36,14 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <label for="file">Галерея:</label>
+                        <label for="file">Галерея: <small>(минимум 3 фотографии)</small></label>
                         <br>
                         <input type="file" multiple name="file[]" id="file">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <label for="google_maps">Координаты на карте:</label>
+                        <label for="google_maps">Координаты на карте:  <small>(730px на 300px)</small></label>
                         <br>
                         <textarea class="col-12 col-lg-6" name="google_maps" id="google_maps" cols="150" rows="2"></textarea>
                     </div>
@@ -60,14 +67,23 @@
     function validateForm(){
         let valid = true;
         let title = $('#title').val();
+        let location = $('#location').val();
         console.log(file);
         let category = parseInt($('#category').val());
         let summernote = $('#summernote').val();
+
         if(title.length < 2){
             $('.title').text('пожалуйста заполните это поле');
             valid = false;
         }else{
             $('.title').text('');
+        }
+
+        if(location.length < 2){
+            $('.location').text('пожалуйста заполните это поле');
+            valid = false;
+        }else{
+            $('.location').text('');
         }
 
         if(summernote.length < 2){

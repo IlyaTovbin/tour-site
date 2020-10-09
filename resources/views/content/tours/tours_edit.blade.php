@@ -11,7 +11,7 @@
             <a class="btn btn-secondary" href="{{ url('/tours') }}">Назад</a>
         </div>
         <div>
-            <form action="{{ url("/tours/{$tour->id}") }}" method="POST" onsubmit="return validateForm()" class="create-post-form">
+            <form action="{{ url("/tours/{$tour->id}") }}" enctype="multipart/form-data" method="POST" onsubmit="return validateForm()" class="create-post-form">
                 {{ method_field('PUT') }}
                 @csrf
                 <div class="form-row">
@@ -22,6 +22,13 @@
                    </div>
                 </div>
                 <div class="form-row">
+                    <div class="form-group col-md-6">
+                     <label for="location">Локация: <small>(Москва, Россия)</small></label>
+                     <input type="text" class="form-control" name="location" id="location" value="{{ $tour->location ?? '' }}">
+                     <span class="text-danger location"></span>
+                    </div>
+                 </div>
+                <div class="form-row">
                     <div class="form-group col-md-12">
                         <textarea name="summernote" id="summernote">{{ $tour->body ?? '' }}</textarea>
                         <span class="summernote-error text-danger"></span>
@@ -29,24 +36,31 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <label for="google_maps">Координаты на карте:</label>
+                        <label for="google_maps">Координаты на карте:  <small>(730px на 300px)</small></label>
                         <br>
                         <textarea class="col-12 col-lg-6" name="google_maps" id="google_maps" cols="150" rows="2">{{ $tour->google_maps ?? '' }}</textarea>
                     </div>
                 </div>
                 @if($tour->images)
                 <div class="form-row">
-                    <div class="form-group col-lg-12">
-                        @foreach ($tour->images as $image)
-                           <img src="{{ url('images/tours/' . $image) }}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 dropdown-toggle img-fluid col-12 col-lg-2 mb-1" alt="Responsive image">
-                           <div class="dropdown-menu p-2">
-                            <p class=""><a href="#" class="text-dark card-link non-target"  data-id="{{ $image }}"><i class="far fa-trash-alt"></i> Удалить</a></p>
+                    @foreach ($tour->images as $image)
+                        <div class="card p-1 col-12 col-lg-2" style="width: 18rem;">
+                            <img class="card-img-top" src="{{ url('images/tours/' . $image) }}" alt="Card image cap">
+                            <div class="card-body text-center">
+                                <a href="#" data-id="{{ $tour->id }}" data-image="{{ $image }}" class="non-target btn btn-danger delete-image">Удалить</a>
                             </div>
-                        @endforeach
-                    </div>
+                        </div>
+                    @endforeach
                 </div>
                 @endif
-                <button type="submit" class="btn btn-primary">Редактировать</button>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="file">Галерея:</label>
+                        <br>
+                        <input type="file" multiple name="file[]" id="file">
+                    </div>
+                </div>
+                <button type="submit" class="mt-2 btn btn-primary">Редактировать</button>
               </form>
         </div>
     </main>  
@@ -60,6 +74,22 @@
 
 @section('script')
 <script>
+
+    const UPLOAD_TOUR_URL = "{{ url('/ajaxRequest/tour') }}";
+
+    $('.delete-image').on('click', function(){
+        data = {
+            method: 'deleteImage',
+            id: $(this).data('id'),
+            image: $(this).data('image')
+        }
+        sendAjax(data, UPLOAD_TOUR_URL, false, 'get', 'html', deleteImage);
+    })
+
+    function deleteImage(image_src){
+        $(`.delete-image[data-image="${data.image}"]`).closest('.card').remove();
+    }
+
     function validateForm(){
         let valid = true;
         let title = $('#title').val();
@@ -82,9 +112,6 @@
         return false;
 
     }
-
-
-    const UPLOAD_TOUR_URL = "{{ url('/ajaxRequest/tour') }}";
 
     $('#summernote').summernote({
         tabsize: 2,
