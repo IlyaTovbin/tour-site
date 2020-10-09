@@ -18,9 +18,9 @@
       </h6>
       <ul class="nav flex-column mb-2">
         <li class="nav-item">
-            <a class="nav-link nav-link-a {{ $schedule ?? '' }}" href="{{ url('/schedule') }}">
+            <a class="nav-link nav-link-a {{ $schedule_nav ?? '' }}" href="{{ url('/schedule') }}">
                 <span data-feather="file-text"></span>
-                Расписание
+                Расписания
             </a>
         </li>
         <li class="nav-item">
