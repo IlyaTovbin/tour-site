@@ -52,7 +52,7 @@ class Category extends Model
         if(is_numeric($id)){
             $query = DB::table('categories')->where('id', $id)->select('image')->first();
             if($query){
-                unlink(public_path('images\\category\\') . $query->image);
+                FileManager::deleteFile(public_path('images\\category\\') . $query->image);
                 $query = DB::table('categories')->where('id', $id)->delete();
             }
         }
@@ -63,7 +63,7 @@ class Category extends Model
         if($request['image']){
             $path = 'images\\category\\';
             $image = FileManager::moveFile($request['image'], $path);
-            unlink(public_path($path) . $request['check']);
+            FileManager::deleteFile(public_path($path) . $request['check']);
         }else{
             $image = $request['check'];
         }

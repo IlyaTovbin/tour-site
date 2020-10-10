@@ -62,11 +62,11 @@ class Blog extends Model
         if(is_numeric($id)){
             $query = DB::table('blogs')->where('id', $id)->select('image', 'content_images')->first();
             if($query){
-                unlink(public_path('images\\blogs\\') . $query->image);
+                FileManager::deleteFile(public_path('images\\blogs\\') . $query->image);
                 if($query->content_images){
                     $images = unserialize($query->content_images);
                     foreach($images as $image){
-                        unlink(public_path('images\\blogs\\content_images\\') . $image);
+                        FileManager::deleteFile(public_path('images\\blogs\\content_images\\') . $image);
                     }
                 }
                 $query = DB::table('blogs')->where('id', $id)->delete();
@@ -95,7 +95,7 @@ class Blog extends Model
         if($request['image']){
             $path = 'images\\blogs\\';
             $image = FileManager::moveFile($request['image'], $path);
-            unlink(public_path($path) . $request['check']);
+            FileManager::deleteFile(public_path($path) . $request['check']);
         }else{
             $image = $request['check'];
         }
@@ -141,7 +141,7 @@ class Blog extends Model
 
     static public function removeFileFrom($file_name){
         FileManager::removeFileFromSM($file_name);
-        unlink(public_path('images\\blogs\\content_images\\') . $file_name);
+        FileManager::deleteFile(public_path('images\\blogs\\content_images\\') . $file_name);
     }
 
 }

@@ -10,10 +10,19 @@ class FilaManagerProvider extends ServiceProvider
     static public function moveFile($file, $path){
         $name = $file->getClientOriginalName();
         $path = public_path($path);
+        $path = self::backToFrontSlash($path);
         $file_name = pathinfo($name, PATHINFO_FILENAME) . date("-Y-m-d-H-i-s.")  . pathinfo($name, PATHINFO_EXTENSION);
         $result = $file->move($path, $file_name);
         if($result) return $file_name;
         return false;
+    }
+
+    static public function deleteFile($path){
+        unlink(self::backToFrontSlash($path));
+    }
+
+    static public function backToFrontSlash($path){
+        return str_replace('\\', '/', $path);
     }
 
     static public function imageUploadToSM($file_name){
@@ -33,6 +42,7 @@ class FilaManagerProvider extends ServiceProvider
         $images_name = Session::get('files');
         $new_names = [];
         $path = public_path($path);
+        $path = self::backToFrontSlash($path);
         foreach($images_name as $iname){
             if(file_exists($path . $iname)){
                 if(strpos($iname, 'sm-') === false){

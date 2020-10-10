@@ -76,12 +76,12 @@ class Tour extends Model
             if($query){
                 $gallery = unserialize($query->images);
                 foreach($gallery as $image){
-                    unlink(public_path('images\\tours\\') . $image);
+                    FileManager::deleteFile(public_path('images\\tours\\') . $image);
                 }
                 if($query->content_images){
                     $images = unserialize($query->content_images);
                     foreach($images as $image){
-                        unlink(public_path('images\\tours\\content_images\\') . $image);
+                        FileManager::deleteFile(public_path('images\\tours\\content_images\\') . $image);
                     }
                 }
 
@@ -114,7 +114,7 @@ class Tour extends Model
         }
         $images_gallery = DB::table('tours')->where('id', '=', $id)->select('images')->first();
         if($request['file']){
-            $images_gallery = array_merge(unserialize($images_gallery->images), $file_names);
+            $images_gallery = array_merge(unserialize($images_gallery->images) ? unserialize($images_gallery->images) : [], $file_names);
         }else{
             $images_gallery = unserialize($images_gallery->images);
         }
@@ -149,7 +149,7 @@ class Tour extends Model
 
     static public function removeFileFrom($file_name){
         FileManager::removeFileFromSM($file_name);
-        unlink(public_path('images\\tours\\content_images\\') . $file_name);
+        FileManager::deleteFile(public_path('images\\tours\\content_images\\') . $file_name);
     }
 
     static public function deleteImage($request){
@@ -158,7 +158,7 @@ class Tour extends Model
         if(!$images) return false;
         $images = unserialize($images->images);
         $key = array_search($request['image'], $images);
-        unlink(public_path('images\\tours\\') . $request['image']);
+        FileManager::deleteFile(public_path('images\\tours\\') . $request['image']);
         unset($images[$key]);
         DB::table('tours')
         ->where('id', '=', $request['id'])
