@@ -9,6 +9,6 @@ use DB, FileManager, Session;
 class Schedule extends Model
 {
 
-
+    
 
 }

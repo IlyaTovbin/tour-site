@@ -168,4 +168,8 @@ class Tour extends Model
         ]);
         echo $request['image'];
     }
+
+    static public function getToursIdName(){
+        return DB::table('tours')->select('id', 'title')->get();
+    }
 }
