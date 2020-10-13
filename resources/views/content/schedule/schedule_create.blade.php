@@ -22,25 +22,25 @@
                    </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="tour">Маршруты:</label>
-                        <select id="tour" name="tour" class="form-control">
-                          <option>Список Маршрутов...</option>
-                          @if(!empty($tours))
-                            @foreach($tours as $tour)
-                                <option class="" value="{{ $tour->id }}">
-                                    {{ $tour->title }}
-                                </option>
-                            @endforeach
-                          @endif
-                        </select>
-                        <span class="text-danger tour"></span>
+                    <div class="form-group col-md-12">
+                        <textarea name="summernote" id="summernote"></textarea>
+                        <span class="summernote-error text-danger"></span>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <textarea name="summernote" id="summernote"></textarea>
-                        <span class="summernote-error text-danger"></span>
+                        <label for="google_maps">Заметка: <i>(не обязательно)</i></label>
+                        <br>
+                        <textarea class="form-control" name="notes" rows="5" cols="100" id="notes"></textarea>
+                        <span class="notes-error text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="google_maps">Координаты на карте:  <small>(730px на 300px)</small> 
+                            <i>(не обязательно)</i></label>
+                        <br>
+                        <textarea class="col-12 col-lg-6" name="google_maps" id="google_maps" cols="150" rows="2"></textarea>
                     </div>
                 </div>
                 <div class="form-row">
@@ -53,16 +53,22 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="from_date">Дата от:</label>
-                        <input class="form-control" name="from_date" type="text" id="from_date">
+                        <input class="form-control" name="from_date" type="text" id="from_date" autocomplete="off">
                         <span class="text-danger from_date"></span>
                     </div>
                 </div>
-
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="to_date">Дата до:</label>
-                        <input class="form-control" name="to_date" type="text" id="to_date">
+                        <label for="to_date">Дата до: <i>(не обязательно)</i></label>
+                        <input class="form-control" name="to_date" type="text" id="to_date" autocomplete="off">
                         <span class="text-danger to_date"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="file">Галерея: <small>(минимум 3 фотографии)</small> <i>(не обязательно)</i></label>
+                        <br>
+                        <input type="file" multiple name="file[]" id="file">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Сохранить</button>
@@ -78,7 +84,6 @@
 @endsection
 
 @section('script')
-<script src="{{ asset('js/jquery-ui-1.12.1.custom/jquery-ui.js') }}"></script>
 <script>
     $( function() {
         $( "#from_date" ).datepicker();
@@ -90,23 +95,17 @@
 
     function validateForm(){
         let valid = true;
-        let image = $('#image').val();
         let title = $('#title').val();
-        let category = parseInt($('#category').val());
         let summernote = $('#summernote').val();
-        console.log(summernote);
+        let price = $('#price').val();
+        let from_date = $("#from_date").val()
+        let to_date = $('#to_date').val();
+
         if(title.length < 2){
             $('.title').text('пожалуйста заполните это поле');
             valid = false;
         }else{
             $('.title').text('');
-        }
-
-        if(!Number.isInteger(category)){
-            $('.category').text('пожалуйста выберите категорию');
-            valid = false;
-        }else{
-            $('.category').text('');
         }
 
         if(summernote.length < 2){
@@ -116,10 +115,20 @@
             $('.summernote-error').text('');
         }
 
-        if(image.length < 3){
-            $('.image-error').text('пожалуйста заполните это поле');
+        if(price.length < 1){
+            $('.price').text('пожалуйста заполните это поле');
             valid = false;
+        }else{
+            $('.price').text('');
         }
+
+        if(from_date.length < 1){
+            $('.from_date').text('пожалуйста заполните это поле');
+            valid = false;
+        }else{
+            $('.from_date').text('');
+        }
+
         if(valid){
             return true;
         } 

@@ -188,7 +188,6 @@
         </div>
       </nav>
       <!-- /Navbar -->
-    </header>
 
     <div class="row" style="margin-right: 0px; margin-left: 0px;">
         <div class="MultiCarousel" data-items="1,1,3,3" data-slide="1" id="MultiCarousel"  data-interval="1000">

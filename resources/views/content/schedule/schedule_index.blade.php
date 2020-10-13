@@ -14,32 +14,32 @@
             <a class="btn btn-primary" href="{{ url('/schedule/create') }}">+Создать Расписние</a>
         </div>
         @component('utilities.filter_bar', [ 
-            // 'filterBy' => $relevant_categories,
             'url' => $url 
         ])
         @endcomponent
         <div class="row">
-            {{-- @if(isset($posts) && count($posts) > 0)
-            @foreach ($posts as $post)
+            @if(isset($schedules) && count($schedules) > 0)
+            @foreach ($schedules as $schedule)
                 <div class="col-12 col-lg-4 my-1">
                     <div class="card shadow h-100">
                         <div class="card-body">
                             <h5 class="card-title">
                                 <a class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ $post->title }}</a>
+                                    {{ $schedule->title }}</a>
                                 <div class="dropdown-menu p-2 ">
-                                <p class=""><a href="{{ url("/blog/{$post->id}/edit") }}" class="text-dark card-link"><i class="fas fa-edit"></i> Редактировать</a></p>
-                                <p class=""><a href="#" class="text-dark card-link non-target delete-card" data-title="{{ $post->title }}" data-id="{{ $post->id }}"><i class="far fa-trash-alt"></i> Удалить</a></p>
+                                <p class=""><a href="{{ url("/schedule/{$schedule->id}/edit") }}" class="text-dark card-link"><i class="fas fa-edit"></i> Редактировать</a></p>
+                                <p class=""><a href="#" class="text-dark card-link non-target delete-card" data-title="{{ $schedule->title }}" data-id="{{ $schedule->id }}"><i class="far fa-trash-alt"></i> Удалить</a></p>
                                 </div>
                             </h5>
-                            <p class="card-text"><i class="fas fa-list"></i> Категория: {{ $post->category }} </p>
-                            <p class="card-text"><i class="far fa-calendar-alt"></i> Создан: {{ $post->created_at }}</p>
-                            <p class="card-text"><a target="_blank" href="{{ url("blog/{$post->id}") }}"><i class="far fa-eye"></i> Просмотр</a></p>
-                            @if($post->created_at != $post->updated_at)
-                                <p class="card-text text-success"><i class="far fa-calendar-alt"></i> Обновлен: {{ $post->updated_at }}</p>
+                            <p class="card-text"> Цена: {{ $schedule->price }} </p>
+                            <p class="card-text"><i class="far fa-calendar-alt"></i> Дата: {{ $schedule->from_date }} @if($schedule->to_date) <span>до {{ $schedule->to_date }}</span>  @endif</p>
+                            <p class="card-text"><i class="far fa-calendar-alt"></i> Создано: {{ $schedule->created_at }}</p>
+                            <p class="card-text"><a target="_blank" href="{{ url("schedule/{$schedule->id}") }}"><i class="far fa-eye"></i> Просмотр</a></p>
+                            @if($schedule->created_at != $schedule->updated_at)
+                                <p class="card-text text-success"><i class="far fa-calendar-alt"></i> Обновлено: {{ $schedule->updated_at }}</p>
                             @endif
                             <div class="form-check">
-                                <input class="form-check-input" @if($post->active === 1) checked @endif data-id="{{ $post->id }}" type="checkbox">
+                                <input class="form-check-input" @if($schedule->active === 1) checked @endif data-id="{{ $schedule->id }}" type="checkbox">
                                 <label class="form-check-label">
                                     Показать на сайте
                                 </label>
@@ -49,23 +49,23 @@
                 </div>
             @endforeach
             @else
-                <p class="mx-3"><i>Посты не найдены</i></p>
-            @endif --}}
+                <p class="mx-3"><i>расписание не найдены</i></p>
+            @endif
         </div>
         <div class="d-flex justify-content-center my-4">
-            {{-- {{ $posts->links() ?? '' }} --}}
+            {{ $schedules->links() ?? '' }}
         </div>    
     </main>  
 
 
     @component('utilities.center_modal')
-    @slot('title')Удалить Статью? @endslot
+    @slot('title')Удалить расписания? @endslot
     @slot('modal_id')deleteModal @endslot
     @slot('body')
     <p class="content-value badge badge-danger"></p> 
     <input type="hidden" class="id-value">
     @endslot
-    @slot('action') delete-post btn-danger @endslot
+    @slot('action') delete-schedule btn-danger @endslot
     @slot('actionName') Удалить @endslot
     @endcomponent
 
@@ -75,4 +75,5 @@
     <script>
         const SCHEDULE_URL = "{{ url('/ajaxRequest/schedule') }}";
     </script>
+    <script src="{{ asset('js/content/schedule.js') }}"></script>
 @endsection

@@ -1,10 +1,10 @@
-$('.delete-tour').on('click', function(){
+$('.delete-schedule').on('click', function(){
     data = {
         id: $('.id-value').val(),
-        method: 'deleteTour'
+        method: 'deleteSchedule'
     }
     if(data.id){
-        sendAjax(data, TOUR_URL)
+        sendAjax(data, SCHEDULE_URL)
     }
 })
 
@@ -14,7 +14,7 @@ $('.form-check-input').on('click', function(){
     let data = { 
         id: id,
         value: value,
-        method: 'activeTour' 
+        method: 'activeSchedule' 
     }
-    sendAjax(data, TOUR_URL, false)
+    sendAjax(data, SCHEDULE_URL, false)
 })
