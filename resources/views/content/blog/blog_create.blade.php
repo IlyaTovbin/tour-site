@@ -35,7 +35,22 @@
                         </select>
                         <span class="text-danger category"></span>
                     </div>
-                    
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="author">Автор:</label>
+                        <select id="author" name="author" class="form-control">
+                          <option>Список авторов...</option>
+                          @if(!empty($authors))
+                            @foreach($authors as $author)
+                                <option class="" value="{{ $author->id }}">
+                                    {{ $author->name }}
+                                </option>
+                            @endforeach
+                          @endif
+                        </select>
+                        <span class="text-danger author"></span>
+                    </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
@@ -68,6 +83,7 @@
         let image = $('#image').val();
         let title = $('#title').val();
         let category = parseInt($('#category').val());
+        let author = parseInt($('#author').val());
         let summernote = $('#summernote').val();
         console.log(summernote);
         if(title.length < 2){
@@ -82,6 +98,13 @@
             valid = false;
         }else{
             $('.category').text('');
+        }
+
+        if(!Number.isInteger(author)){
+            $('.author').text('пожалуйста выберите категорию');
+            valid = false;
+        }else{
+            $('.author').text('');
         }
 
         if(summernote.length < 2){

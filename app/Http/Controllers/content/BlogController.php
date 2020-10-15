@@ -53,6 +53,7 @@ class BlogController extends Controller
         FileManager::cleanUselessFiles(public_path('images\\blogs\\content_images\\'));
         $this->view_data['title'] .= ' Create';
         $this->view_data['categories'] = Category::getCategories();
+        $this->view_data['authors'] = Blog::getAuthors();
         return view('content/blog/blog_create', $this->view_data);
     }
 
@@ -68,6 +69,7 @@ class BlogController extends Controller
         FileManager::setFilesSession($this->view_data['post']->content_images);
         $this->view_data['title'] .= ' Edit';
         $this->view_data['categories'] = Category::getCategories();
+        $this->view_data['authors'] = Blog::getAuthors();
         return view('content/blog/blog_edit', $this->view_data);
     }
 

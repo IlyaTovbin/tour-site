@@ -126,6 +126,11 @@
         margin-top: 3rem !important;
     }
 
+    .blockquote{
+      white-space: normal;
+      overflow: hidden;
+    }
+
 </style>
 @endsection
 

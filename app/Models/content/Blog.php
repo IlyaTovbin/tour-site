@@ -12,7 +12,18 @@ class Blog extends Model
     static public function getPosts($request = false){
         $posts = DB::table('blogs as b')
         ->join('categories as c', 'c.id', 'b.categorie_id')
-        ->select('b.id', 'b.title', 'b.categorie_id', 'b.active', 'b.created_at', 'b.updated_at', 'c.name as category');
+        ->join('authors as a', 'a.id', 'b.author_id')
+        ->select(
+         'b.id',
+         'b.title',
+         'b.categorie_id',
+         'b.active',
+         'b.created_at',
+         'b.updated_at',
+         'c.name as category',
+         'a.name as author',
+         'a.image as author_image'
+        );
 
         if(isset($request['filterBy']) && is_numeric($request['filterBy'])){
             $posts = $posts->where('b.categorie_id', '=', $request['filterBy']);
@@ -47,6 +58,7 @@ class Blog extends Model
         if($file_name){
             $blog = new self();
             $blog->categorie_id = $request['category'];
+            $blog->author_id = $request['author'];
             $blog->title = $request['title'];
             $blog->body = serialize($data_content);
             $blog->image = $file_name;
@@ -78,8 +90,9 @@ class Blog extends Model
         if(is_numeric($id)){
             $post = DB::table('blogs as b')
             ->join('categories as c', 'c.id', 'b.categorie_id')
+            ->join('authors as a', 'a.id', 'b.author_id')
             ->where('b.id', '=', $id)
-            ->select('b.*', 'c.name as category')
+            ->select('b.*', 'c.name as category', 'a.name as author')
             ->first();
             if(empty($post)) return false;
             $post->body = unserialize($post->body);
@@ -113,6 +126,7 @@ class Blog extends Model
         ->update([
             'title' => $request['title'],
             'categorie_id' => $request['category'],
+            'author_id' => $request['author'],
             'body' => serialize($data_content),
             'image' => $image,
             'content_images' => $images_content ? serialize($images_content) : null, 
@@ -142,6 +156,12 @@ class Blog extends Model
     static public function removeFileFrom($file_name){
         FileManager::removeFileFromSM($file_name);
         FileManager::deleteFile(public_path('images\\blogs\\content_images\\') . $file_name);
+    }
+
+    static public function getAuthors(){
+        return DB::table('authors')
+        ->select('id', 'name')
+        ->get();
     }
 
 }

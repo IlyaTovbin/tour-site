@@ -19,6 +19,7 @@ class BlogRequest extends FormRequest
         return [
             'title' => 'required|min:2',
             'category' => 'required',
+            'author' => 'required',
             'summernote' => 'required|min:2',
             'image' => $required,
         ];

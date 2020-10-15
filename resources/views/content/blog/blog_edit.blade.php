@@ -37,7 +37,22 @@
                         </select>
                         <span class="text-danger category"></span>
                     </div>
-                    
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="author">Автор:</label>
+                        <select id="author" name="author" class="form-control">
+                        {{-- <option value="{{ $post->categorie_id ?? '' }}">{{ $post->category ?? '' }}</option> --}}
+                          @if(!empty($authors))
+                            @foreach($authors as $author)
+                                <option class="" value="{{ $author->id }}">
+                                    {{ $author->name }}
+                                </option>
+                            @endforeach
+                          @endif
+                        </select>
+                        <span class="text-danger author"></span>
+                    </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
