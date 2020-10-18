@@ -60,6 +60,14 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
+                        <label for="short_content">краткое описание:</label>
+                        <br>
+                        <textarea maxlength="200" class="form-control" rows="4" cols="20" name="shot_content" id="shot_content"></textarea>
+                        <span class="shot_content-error text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
                         <input type="file" name="image" id="image">
                         <p class="image-error text-danger"></p>
                     </div>
@@ -85,6 +93,7 @@
         let category = parseInt($('#category').val());
         let author = parseInt($('#author').val());
         let summernote = $('#summernote').val();
+        let shot_content = $('#shot_content').val();
         console.log(summernote);
         if(title.length < 2){
             $('.title').text('пожалуйста заполните это поле');
@@ -112,6 +121,17 @@
             valid = false;
         }else{
             $('.summernote-error').text('');
+        }
+
+        if(shot_content.length < 2){
+            $('.shot_content-error').text('пожалуйста заполните это поле');
+            valid = false;
+        }else if(shot_content.length > 200){
+            $('.shot_content-error').text('максимум 200 символов ');
+            valid = false;
+        }
+        else{
+            $('.shot_content-error').text('');
         }
 
         if(image.length < 3){

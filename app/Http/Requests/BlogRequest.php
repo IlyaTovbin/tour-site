@@ -21,6 +21,7 @@ class BlogRequest extends FormRequest
             'category' => 'required',
             'author' => 'required',
             'summernote' => 'required|min:2',
+            'short_content' => 'required|min:2|max:200',
             'image' => $required,
         ];
     }

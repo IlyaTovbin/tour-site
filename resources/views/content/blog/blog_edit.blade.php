@@ -62,6 +62,14 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
+                        <label for="short_content">краткое описание:</label>
+                        <br>
+                        <textarea maxlength="200" class="form-control" rows="4" cols="20" name="short_content" id="short_content">{{ $post->short_content ?? '' }}</textarea>
+                        <span class="short_content-error text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
                         <label for="image">Фотография:</label>
                         <br>
                         <img src="{{ url('images/blogs/' . $post->image) }}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 dropdown-toggle img-fluid col-12 col-lg-2 mb-1" alt="Responsive image">
@@ -89,6 +97,7 @@
         let title = $('#title').val();
         let category = parseInt($('#category').val());
         let summernote = $('#summernote').val();
+        let short_content = $('#shot_content').val();
         if(title.length < 2){
             $('.title').text('пожалуйста заполните это поле');
             valid = false;
@@ -108,6 +117,17 @@
             valid = false;
         }else{
             $('.summernote-error').text('');
+        }
+
+        if(short_content.length < 2){
+            $('.short_content-error').text('пожалуйста заполните это поле');
+            valid = false;
+        }else if(short_content.length > 200){
+            $('.short_content-error').text('максимум 200 символов ');
+            valid = false;
+        }
+        else{
+            $('.shot_content-error').text('');
         }
 
         if(valid) return true;

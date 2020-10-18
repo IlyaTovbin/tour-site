@@ -61,6 +61,7 @@ class Blog extends Model
             $blog->author_id = $request['author'];
             $blog->title = $request['title'];
             $blog->body = serialize($data_content);
+            $blog->short_content = $request['short_content'];
             $blog->image = $file_name;
             $blog->content_images = $images_content ? serialize($images_content) : null;
             $blog->save();
@@ -128,6 +129,7 @@ class Blog extends Model
             'categorie_id' => $request['category'],
             'author_id' => $request['author'],
             'body' => serialize($data_content),
+            'short_content' => $request['short_content'],
             'image' => $image,
             'content_images' => $images_content ? serialize($images_content) : null, 
             'updated_at' => Carbon::now()
