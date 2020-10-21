@@ -17,6 +17,8 @@ Route::middleware(['login_guard'])->group(function () {
     Route::resource('/blog', 'App\Http\Controllers\content\BlogController');
     Route::resource('/faq', 'App\Http\Controllers\content\FaqController');
     Route::resource('/categories', 'App\Http\Controllers\content\CategoryController');
+    
+    Route::resource('/schedule-clients', 'App\Http\Controllers\clients\ScheduleClientsController');
 
     Route::get('ajaxRequest/blog', 'App\Http\Controllers\content\BlogController@ajaxRequest');
     Route::post('ajaxRequest/blog', 'App\Http\Controllers\content\BlogController@ajaxRequest');
