@@ -62,7 +62,7 @@
                     <div class="form-group col-md-12">
                         <label for="short_content">краткое описание:</label>
                         <br>
-                        <textarea maxlength="200" class="form-control" rows="4" cols="20" name="shot_content" id="shot_content"></textarea>
+                        <textarea maxlength="200" class="form-control" rows="4" cols="20" name="short_content" id="shot_content"></textarea>
                         <span class="shot_content-error text-danger"></span>
                     </div>
                 </div>
@@ -94,7 +94,6 @@
         let author = parseInt($('#author').val());
         let summernote = $('#summernote').val();
         let shot_content = $('#shot_content').val();
-        console.log(summernote);
         if(title.length < 2){
             $('.title').text('пожалуйста заполните это поле');
             valid = false;
