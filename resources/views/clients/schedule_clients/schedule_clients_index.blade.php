@@ -13,12 +13,15 @@
             <h1 class="h2">список клиентов</h1>
         </div>
         @component('utilities.filter_bar', [ 
-            'url' => $url 
+            'url' => $url ,
+            'active_off' => 1,
+            'filterBy' => $schedules
         ])
         @endcomponent
         <table class="table">
             <thead class="thead-dark">
               <tr>
+                <th scope="col">Мероприятия</th>
                 <th scope="col">Имя</th>
                 <th scope="col">Email</th>
                 <th scope="col">Телефон</th>
@@ -35,6 +38,7 @@
                 @if(isset($info) && count($info) > 0)
                 @foreach ($info as $client)
                 <tr class="hover-bg">
+                    <th>{{ $client->title }}</th>
                     <th scope="row"> {{ $client->name }}</th>
                     <td>{{ $client->email }}</td>
                     <td>{{ $client->phone }}</td>

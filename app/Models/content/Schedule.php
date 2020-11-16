@@ -30,6 +30,12 @@ class Schedule extends Model
 
         return $tours->simplePaginate(12);
     }
+
+    static public function getNamesSchedules(){
+       return DB::table('schedules')
+       ->select('id', 'title as name')
+       ->get();
+    }
     
     static public function store($request){
         $data_content = $request['summernote'];
