@@ -1,5 +1,5 @@
 @php
-    $url = url('/blog');
+    $url = url('/schedule-clients');
 @endphp
 @extends('dashboard')
 

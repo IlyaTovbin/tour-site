@@ -5,7 +5,7 @@
       <select class="form-control select-option-filterBy">
             <option value="">Все</option>
             @foreach ($filterBy as $item)
-                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                <option value="{{ $item->id ?? $item['id']}}">{{ $item->name ?? $item['type'] }}</option>
             @endforeach
       </select>
     </div>
@@ -36,6 +36,7 @@
         e.preventDefault();
         let filterBy = $('.select-option-filterBy').val();
         let active = $('.select-by-active').val();
+        if(active == undefined) active = '';
         let filterByCreated = $('.select-by-newest').val();
         let search = $('.input-search').val();
         let url = $('.filter-form').attr('action');

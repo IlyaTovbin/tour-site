@@ -6,26 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use DB;
 
-class ScheduleClient extends Model
+class ContactClient extends Model
 {
     static public function getInfo($request){
-        $info = DB::table('schedule_clients as sc')
-        ->join('schedules as s', 's.id', 'sc.schedule_id')
-        ->select('sc.*', 's.title', 's.from_date', 'to_date');
+        $info = DB::table('contacts')
+        ->select('*');
 
         if(isset($request['filterBy']) && is_numeric($request['filterBy'])){
-            $info = $info->where('sc.schedule_id', '=', $request['filterBy']);
+            $info = $info->where('type', '=', $request['filterBy']);
         }
 
         if(isset($request['filterByCreated']) && in_array($request['filterByCreated'], ['DESC', 'ASC'])){
-            $info = $info->orderBy('sc.updated_at', $request['filterByCreated']);
+            $info = $info->orderBy('updated_at', $request['filterByCreated']);
         }else{
-            $info = $info->orderBy('sc.updated_at', 'DESC');
+            $info = $info->orderBy('updated_at', 'DESC');
         }
 
         if(isset($request['search'])){
             $search = $request['search'];
-            $info = $info->where('sc.name', 'LIKE', "%$search%");
+            $info = $info->where('name', 'LIKE', "%$search%");
         }
 
         return $info->simplePaginate(20);
