@@ -30,4 +30,38 @@ class ScheduleClient extends Model
 
         return $info->simplePaginate(20);
     }
+
+    static public function deleteClient($id){
+        if(is_numeric($id)){
+            $query = DB::table('schedule_clients')->where('id', $id)->select('name')->first();
+            if($query){
+                $query = DB::table('schedule_clients')->where('id', $id)->delete();
+            }
+        }
+    }
+
+    static public function getScheduleClient($id){
+        if(is_numeric($id)){
+            return DB::table('schedule_clients')->where('id', $id)->first();
+        }
+    }
+
+    static public function updateScheduleClient($request,int $id){
+
+        DB::table('schedule_clients')
+        ->where('id', '=', $id)
+        ->update([
+            'schedule_id' => $request['schedule'],
+            'name' => $request['name'],
+            'phone' => $request['phone'],
+            'email' => $request['email'],
+            'quantity' => $request['quantity'],
+            'transport' => $request['transport'],
+            'pay' => $request['pay'],
+            'price' => $request['price'],
+            'city' => $request['city'],
+            'updated_at' => Carbon::now()
+        ]);
+        return true;
+    }
 }

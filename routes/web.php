@@ -19,6 +19,7 @@ Route::middleware(['login_guard'])->group(function () {
     Route::resource('/categories', 'App\Http\Controllers\content\CategoryController');
     
     Route::resource('/schedule-clients', 'App\Http\Controllers\clients\ScheduleClientsController');
+    Route::get('ajaxRequest/schedule-clients', 'App\Http\Controllers\clients\ScheduleClientsController@ajaxRequest');
 
     Route::resource('/contacts', 'App\Http\Controllers\clients\ContactClientsController');
 

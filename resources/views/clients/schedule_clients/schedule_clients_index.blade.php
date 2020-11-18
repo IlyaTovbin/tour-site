@@ -39,7 +39,14 @@
                 @foreach ($info as $client)
                 <tr class="hover-bg">
                     <th>{{ $client->title }}</th>
-                    <th scope="row"> {{ $client->name }}</th>
+                    <th scope="row">
+                        <a class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ $client->name }}</a>
+                        <div class="dropdown-menu p-2 ">
+                        <p class=""><a href="{{ url("/schedule-clients/{$client->id}/edit") }}" class="text-dark card-link"><i class="fas fa-edit"></i> Редактировать</a></p>
+                        <p class=""><a href="#" class="text-dark card-link non-target delete-card" data-title="{{ $client->name }}" data-id="{{ $client->id }}"><i class="far fa-trash-alt"></i> Удалить</a></p>
+                        </div>
+                    </th>
                     <td>{{ $client->email }}</td>
                     <td>{{ $client->phone }}</td>
                     <td>{{ $client->quantity }}</td>
@@ -62,8 +69,8 @@
     </main>  
 
 
-    {{-- @component('utilities.center_modal')
-    @slot('title')Удалить Статью? @endslot
+    @component('utilities.center_modal')
+    @slot('title')Удалить запись? @endslot
     @slot('modal_id')deleteModal @endslot
     @slot('body')
     <p class="content-value badge badge-danger"></p> 
@@ -71,14 +78,14 @@
     @endslot
     @slot('action') delete-post btn-danger @endslot
     @slot('actionName') Удалить @endslot
-    @endcomponent --}}
+    @endcomponent
 
 @stop
 
 @section('script')
     <script>
-        // const BLOG_URL = "{{ url('/ajaxRequest/blog') }}";
+        const Schedule_Clients_URL = "{{ url('/ajaxRequest/schedule-clients') }}";
         $('.hover-bg').on('hover')
     </script>
-    {{-- <script src="{{ asset('js/content/blog.js') }}"></script> --}}
+    <script src="{{ asset('js/content/scheduleClients.js') }}"></script>
 @endsection
