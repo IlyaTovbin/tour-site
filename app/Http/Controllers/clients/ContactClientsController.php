@@ -16,37 +16,20 @@ class ContactClientsController extends Controller
 
     static public function index(Request $request){
         self::$view_data['info'] = ContactClient::getInfo($request);
-        // self::$view_data['schedules'] = Schedule::getNamesSchedules();
         return view('clients/contacts/contact_index', self::$view_data);
     }
 
-    public function create()
-    {
-        //
+    public function ajaxRequest(Request $request){
+        if(in_array( $request['method'], ['deleteContact'])){
+            $method = $request['method'];
+            $this->$method($request);
+        }else{
+            return 'Error';
+        }
     }
 
-    public function store(Request $request)
-    {
-        //
+    public function deleteContact($request){
+        ContactClient::deleteContact($request['id']);
     }
 
-    public function show(Contact $contact)
-    {
-        //
-    }
-
-    public function edit(Contact $contact)
-    {
-        //
-    }
-
-    public function update(Request $request, Contact $contact)
-    {
-        //
-    }
-
-    public function destroy(Contact $contact)
-    {
-        //
-    }
 }

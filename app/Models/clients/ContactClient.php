@@ -29,4 +29,10 @@ class ContactClient extends Model
 
         return $info->simplePaginate(20);
     }
+
+    static public function deleteContact($id){
+        if(is_numeric($id)){
+            $query = DB::table('contacts')->where('id', $id)->delete();
+        }
+    }
 }
